@@ -67,8 +67,8 @@
   },
   {
     "path": "code/prepare_tables.py",
-    "bytes": 6489,
-    "sha256": "f2ef029d47e743e85c62a90fb24996011047ad4e3053534060d41cb048575357",
+    "bytes": 6644,
+    "sha256": "c3b3e11fbcce80261511c374ecf6cda6ed0990612406d06b9d905a5cd85c93e8",
     "encoding": "utf-8"
   },
   {
@@ -327,6 +327,12 @@
     "path": "paper/naturemag-doi.bst",
     "bytes": 36153,
     "sha256": "df0d948e8b09dedd5ed071af1c7740ed616106e879111f304967e31a87b238a9",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/ocean_references.bib",
+    "bytes": 1116,
+    "sha256": "3b2ba3d269c6711c3fc02b7c8a295aa5fc67913bcd52f51fa2b88f14cfb3201f",
     "encoding": "utf-8"
   },
   {

@@ -50,5 +50,7 @@ for r in records:
     bib.append('@article{'+keys[doi]+',\n  '+',\n  '.join(k+'={'+str(v)+'}' for k,v in [('title','{'+title+'}'),('author',author),('journal',journal),('volume',volume),('pages',pages),('year',year),('doi',doi)])+'\n}')
 bib.append('@article{li2002,author={Li, Xiao Lei and Shao, Zhi Jiang and Qian, Ji Xin},title={An Optimizing Method Based on Autonomous Animats: Fish-swarm Algorithm},journal={Systems Engineering---Theory and Practice},volume={22},number={11},pages={32--38},year={2002},doi={10.12011/1000-6788(2002)11-32}}')
 bib.append('@book{papoulis2002,author={Papoulis, Athanasios and Pillai, S. Unnikrishna},title={Probability, Random Variables, and Stochastic Processes},edition={4},publisher={McGraw-Hill},year={2002}}')
+# Preserve the separately verified marine-data citations on every regeneration.
+bib.append((P/'ocean_references.bib').read_text(encoding='utf-8').strip())
 (P/'references.bib').write_text('\n\n'.join(bib),encoding='utf-8')
 print('Tables, numerical macros and bibliography generated')
