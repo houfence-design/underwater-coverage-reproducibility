@@ -71,3 +71,21 @@ computations; they are not presented as environmental observations.
 
 New computational code is MIT licensed. External data and legacy source retain
 their original terms, as stated in the applicable attribution files.
+
+## Persistent snapshot and delivery correction (2026-10-10)
+
+The historical computational snapshot is publicly archived at
+[10.5281/zenodo.23276706](https://doi.org/10.5281/zenodo.23276706).
+Its computational source and real-input hashes reproduce successfully. Its
+internal old manifest nevertheless has one stale `frozen_data.zip` SHA-256
+and three absent entries (`legacy_support/README.md`, `reference_audit.md`,
+`ZENODO_METADATA.json`). Its README and archived paper snippets also contain
+pre-publication DOI/author placeholders. These historical defects are not
+represented as passing checks, and the already published bytes were not changed.
+
+This code/data-only maintenance package has a fresh manifest of its actual
+files, checked with `python code/verify_release_manifest.py`. It contains no
+manuscript, bibliography or referee-response documents. Current submission
+documents are maintained in the author's local revision project. Numerical
+experiments, real current records and raw trial outcomes are unchanged.
+The older DOI identifies its historical bytes, not an unissued maintenance DOI.

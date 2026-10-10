@@ -1,8 +1,8 @@
 [
   {
     "path": ".github/workflows/reproducibility.yml",
-    "bytes": 423,
-    "sha256": "80c5b81ea8da0eb02035efd2fee2d6e980fc9a2cfee1a89064cdbe09d047ab9b"
+    "bytes": 495,
+    "sha256": "ac1a6c5b9c17d1d52abbdd8607aed43b99784fa216161341f74c71347bd53060"
   },
   {
     "path": ".gitignore",
@@ -75,6 +75,11 @@
     "sha256": "aa9a17a42327772a0ac7ac70b010b61fefe02ec62aac80de529b79a6c71d0b26"
   },
   {
+    "path": "code/verify_release_manifest.py",
+    "bytes": 1160,
+    "sha256": "88ae4803718b9b074b94f69990e08aff4c27888e893bf84b8beb8447ab31f664"
+  },
+  {
     "path": "code/verify_results.py",
     "bytes": 3145,
     "sha256": "06fd5ecee4cfc5c4364eb68972fa3e213941f8f7e02bb9b31cb5163d6bc15a4b"
@@ -100,22 +105,22 @@
     "sha256": "3bbb4ed6f9a3d64665e3463145fd34ee63dcf0dfe9e62120db1abc5ac2a30422"
   },
   {
-    "path": "legacy_support/10) solve2-10-\u95ee\u9898\u4e8c-##\u4ee3\u7801\u8fd0\u884c\u5b8c\u4f1a\u5206\u5e03\u7684\u6563\u70b9\u56fe\u548c\u4e2a\u70b9\u6570\u503c\u65b9\u4fbf\u4ee3\u5165SPSS\u6c42\u89e3.py",
+    "path": "legacy_support/10) solve2-10-问题二-##代码运行完会分布的散点图和个点数值方便代入SPSS求解.py",
     "bytes": 3887,
     "sha256": "bbbdc4bbc8e9fd21ca483d1d6a498e35ecf3b4e08e13a6e3f0964ae17bb51894"
   },
   {
-    "path": "legacy_support/11) solve2-max-\u95ee\u9898\u4e8c-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "path": "legacy_support/11) solve2-max-问题二-##代码根据预测最大值的坐标计算局部最优解.py",
     "bytes": 2613,
     "sha256": "e09a184f6c2072f30096c044a1811bcf01e1d9a774d110ff8763fe7015a7e0fd"
   },
   {
-    "path": "legacy_support/12) solve3-max-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "path": "legacy_support/12) solve3-max-##代码根据预测最大值的坐标计算局部最优解.py",
     "bytes": 3396,
     "sha256": "1cb3856476f9e4c0f9f74f8477aad4b26af43ddb2e425d58afb48a2e960a75cf"
   },
   {
-    "path": "legacy_support/13) \u95ee\u9898\u4e09 \u7528Python\u6c42\u95ee\u9898\u4e09\u7684.py",
+    "path": "legacy_support/13) 问题三 用Python求问题三的.py",
     "bytes": 3871,
     "sha256": "a5b7516c4907393ec33216985488df3c66b701e76a0cca1f4871e076bc64bcc7"
   },
@@ -130,17 +135,17 @@
     "sha256": "cd7e0b4f22f46cab41fa0a8a3c7dc358a202dbffdbba5a7548e062e90c0a9973"
   },
   {
-    "path": "legacy_support/7) solve1-max-\u95ee\u98981-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "path": "legacy_support/7) solve1-max-问题1-##代码根据预测最大值的坐标计算局部最优解.py",
     "bytes": 2007,
     "sha256": "b9ed4e32c3425d6be1068012417def39dfafa00bd03ba74b8618a38fb6610ef7"
   },
   {
-    "path": "legacy_support/8) solve1-\u95ee\u98981##\u4ee3\u7801\u8fd0\u884c\u5b8c\u4f1a\u51fa\u73b0\u5206\u5e03\u7684\u6563\u70b9\u56fe\u548c\u4e2a\u70b9\u6570\u503c\u65b9\u4fbf\u4ee3\u5165SPSS\u6c42\u89e3.py",
+    "path": "legacy_support/8) solve1-问题1##代码运行完会出现分布的散点图和个点数值方便代入SPSS求解.py",
     "bytes": 2303,
     "sha256": "0ae25a7aa0896429d3cea640d2b65da0ceebb5fafc057683e7a4a290248780d2"
   },
   {
-    "path": "legacy_support/9) display_truncated_normal_f-\u95ee\u9898\u4e8c-##\u6b64\u4ee3\u7801\u8fd0\u884c\u5b8c\u540e\u4f1a\u51fa\u73b0\u5355\u8fb9\u622a\u5c3e\u6b63\u6001\u5206\u5e03\u6563\u70b9\u56fe.py",
+    "path": "legacy_support/9) display_truncated_normal_f-问题二-##此代码运行完后会出现单边截尾正态分布散点图.py",
     "bytes": 3605,
     "sha256": "8bcf56bde66488fb7ba278d17305e5043df8908807301fb26bdf480cd14aeff1"
   },
@@ -156,8 +161,8 @@
   },
   {
     "path": "README.md",
-    "bytes": 3550,
-    "sha256": "7b6d4aa81e3aa98ffb1c8666085a9df882bbd5edd9e38ea5b04643d708b41382"
+    "bytes": 4673,
+    "sha256": "fb1422ad397bbe5f683a0f30b6d6e7ffb53e744c8aa6bd6ae82264eebe850674"
   },
   {
     "path": "requirements-lock.txt",
