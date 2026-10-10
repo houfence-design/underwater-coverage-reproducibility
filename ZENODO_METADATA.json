@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "title": "Reproducibility materials for Probabilistic Coverage Optimization for Underwater Sensor Networks under Three-Dimensional Localization Uncertainty",
+    "upload_type": "software",
+    "description": "Executable source, formula-to-code registry, pseudocode, complete parameters, frozen synthetic computational results, real Copernicus Marine GLORYS12V1 historical current subsets, current-conditioned replay outputs, raw Monte Carlo observations and reproduction instructions. Environmental input is the official public OceanBench one-degree derivative, not native-resolution data or sensor field measurements. Training year 2018 is separated from held-out year 2019. The frozen-current displacement rule and residual Gaussian position model are explicitly assumed. External ocean data retain their provider terms; the MIT license covers original Python source. Confidential review reports are excluded.",
+    "creators": [
+      {"name": "Kong, Sibo", "affiliation": "Beijing Polytechnic University"},
+      {"name": "Hou, Xinyu", "affiliation": "Beijing Information Science and Technology University"},
+      {"name": "Jin, Guanghao", "affiliation": "Beijing Polytechnic University"},
+      {"name": "Zhang, Ping", "affiliation": "Beijing Polytechnic University"},
+      {"name": "Zhang, Shengti", "affiliation": "Beijing Information Science and Technology University"}
+    ],
+    "access_right": "open",
+    "license": "mit",
+    "version": "1.0.0",
+    "keywords": ["underwater sensor networks", "probabilistic coverage", "localization uncertainty", "Copernicus Marine", "reproducibility"],
+    "related_identifiers": [
+      {"identifier": "https://github.com/houfence-design/underwater-coverage-reproducibility", "relation": "isSupplementTo", "scheme": "url"},
+      {"identifier": "10.48670/moi-00021", "relation": "isDerivedFrom", "scheme": "doi"}
+    ],
+    "notes": "Prepared deposit metadata. No code-release DOI has been reserved or issued. Publisher author-role and final-manuscript approval remain author responsibilities. The upstream ocean archive does not specify a release version; source object hashes are included."
+  }
+}

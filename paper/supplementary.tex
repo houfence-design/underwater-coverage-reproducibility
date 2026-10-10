@@ -1,0 +1,172 @@
+\documentclass[10pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,graphicx,booktabs,array,hyperref,placeins}
+\usepackage{fancyhdr}\pagestyle{fancy}\fancyhf{}\rhead{Supplementary Information}\cfoot{\thepage}
+\renewcommand{\topfraction}{.95}\renewcommand{\textfraction}{.05}\renewcommand{\floatpagefraction}{.8}
+\renewcommand{\thetable}{S\arabic{table}}\renewcommand{\thefigure}{S\arabic{figure}}
+\title{Supplementary Information\\Probabilistic Coverage Optimization for Underwater Sensor Networks under Three-Dimensional Localization Uncertainty}
+\author{Kong Sibo, Hou Xinyu, Jin Guanghao, Zhang Ping and Zhang Shengti}\date{}
+\begin{document}\maketitle
+\section*{Supplementary Methods S1: Reproducible optimization variants}
+All four algorithms call the same deterministic objective. The normalized variable $\mathbf u\in[0,1]^4$ is decoded by main-text equation (11). Candidate coordinates satisfy the nominal physical constraints by construction. Every call to the objective increments the evaluation counter, whether or not the candidate is accepted. Runs use a maximum of 600 calls and independent seeds 2100--2119. The first 20 uniform candidates are generated with the same seed for PSO and AFSA, and Powell uses their first member as its initial point. Uniform random search is included as an untuned reference.
+
+\paragraph{Powell.} The implementation is \texttt{scipy.optimize.minimize(method='Powell')} with identity initial directions, bounds $[0,1]^4$, \texttt{xtol=1e-5}, \texttt{ftol=1e-9}, \texttt{maxiter=100} and \texttt{maxfev=600}. Its stopping status and actual evaluation count are archived. The best evaluated point is retained even if the evaluation limit is reached.
+
+\paragraph{PSO.} With current position $\mathbf u_i$, personal best $\mathbf p_i$ and global best $\mathbf g$, the velocity update is
+\[
+\mathbf v_i\leftarrow0.7298\mathbf v_i+1.49618\mathbf r_1\odot(\mathbf p_i-\mathbf u_i)+1.49618\mathbf r_2\odot(\mathbf g-\mathbf u_i),
+\]
+where the components of $\mathbf r_1$ and $\mathbf r_2$ are independent uniform variates. Velocity is clipped componentwise to $[-0.2,0.2]$. Positions are clipped to the box after movement and a velocity component is set to zero when its proposed position crosses a bound. Personal and global best values are updated after evaluation. Population initialization is included in the call budget.
+
+\paragraph{Specified AFSA variant.} For budget fraction $\tau=n_{\rm eval}/600$, visual radius is $v=0.5(1-\tau)+0.05$ and movement scale is $h=0.1(1-\tau)+0.01$. Neighbor distances are Euclidean in the unit box. A fish with 1--12 neighbors considers the best neighbor and evaluates the neighborhood centroid; either is eligible as a target if it improves the current value. It then draws at most three local prey candidates uniformly in the four-dimensional visual ball before box projection and stops prey sampling at its first improvement. If eligible targets exist, it selects the best evaluated target and moves a uniform fraction of the step towards it, capped at the target distance. Otherwise it makes a componentwise uniform random move within $[-h,h]^4$, followed by box projection. The moved position is evaluated. Every candidate evaluation, including centroid and prey calls, updates the global best bulletin. The returned solution is the best evaluated point, not necessarily the final position of a fish. This fully specified bounded variant is the AFSA comparator in the manuscript; alternative behavior-selection and step schedules are not evaluated.
+
+\paragraph{Timing and reporting.} Elapsed time begins immediately before optimization and stops before the final refined evaluation. Generation of the common target quadrature precedes timing. The table reports timing on the recorded environment, not a hardware-independent benchmark. The final-coverage standard deviation describes 20 optimization runs; it is distinct from the 30-batch Monte Carlo standard deviation in the main text.
+
+\begin{table}[htbp]\centering\small
+\caption{Repeated algorithm comparison. Final objective values are reevaluated with 48 depth nodes and $11\times7\times15$ target nodes. SD is in percentage points. Each method has 20 independent runs and a maximum allowance of 600 calls per run.}
+\input{generated/algorithms}
+\end{table}
+
+\section*{Supplementary Methods S2: Integration, units and numerical checks}
+For independent Gaussian horizontal coordinates with equal scale, the standardized squared horizontal distance is a noncentral chi-square variable with two degrees of freedom. The noncentrality equals the squared horizontal displacement between target and nominal sensor divided by $\sigma_h^2$. Equation (9) in the main text integrates the resulting disk CDF over physically feasible depth. Its horizontal normalization is exact whenever the target sensing disk lies inside the horizontal physical box; this holds for the complete radius range tested here.
+
+The target-volume weights sum to one, so the output is a dimensionless expected fraction. Multiplication by 100 yields a percentage. A difference of percentages is a number of percentage points; division by the baseline gives a relative percentage change. A density histogram is normalized per metre and must not be described as a probability value without specifying an integration interval.
+
+The four rules below simultaneously refine the depth and target quadratures. Their orders are $(16;5,3,5)$, $(24;7,5,7)$, $(48;11,7,15)$ and $(80;15,9,25)$. Small non-monotone changes occur because the depth integration interval is clipped at the physical lower bound. The changes are diagnostics rather than rigorous error bounds. The zero-depth-scale limit uses direct horizontal disk integration and retains the three-dimensional target volume.
+
+\begin{table}[htbp]\centering\small
+\caption{Coverage fraction under quadrature refinement. The same nominal coordinates are used at all orders. These deterministic values have no sampling confidence interval.}
+\input{generated/quadrature}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Selected optimized nominal coordinates and individual spatial means. Coordinates are rounded for display; full precision is archived. Individual means cannot be added or combined through a complement product to obtain the network mean.}
+\input{generated/coordinates}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Aggregation audit on the fine rule. The correct union forms the complement product before averaging over the volume. ``Product of spatial means'' is the invalid shortcut; ``sum'' is the union bound, not a network probability estimator. Similar values in a weak-coverage example do not establish mathematical equivalence.}
+\input{generated/aggregation}
+\end{table}
+
+\begin{table}[htbp]\centering\small
+\caption{Zero-depth and three-dimensional uncertainty comparison for the fixed nine-node geometry. All entries are expected coverage in percent, with the same three-dimensional monitoring volume and radius 20 m. Column labels are vertical parent scales in metres.}
+\input{generated/horizontal}
+\end{table}
+\FloatBarrier
+
+\section*{Supplementary Analysis S3: Distribution across feasible designs}
+The original coordinate boxplots and three-dimensional scatter analysis are retained as a controlled descriptive experiment. We draw 600 independent design vectors with $c_x,c_y$ uniform on $[-160,160]$ m, $z_0$ uniform on $[120,270]$ m and fixed pitch 40 m. The seed is 43210. All designs satisfy the nominal physical box. Coverage is evaluated by the common coarse rule. Figure S1 groups designs into four coordinate intervals; differences among boxes combine the focal coordinate with variation in the other coordinates. They must not be interpreted as confidence intervals on coordinate effects or as an optimum-location hypothesis test. Main Fig. 4 separately isolates each coordinate through controlled one-variable sweeps.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS1_design_boxplots.pdf}
+\caption{Descriptive coverage variation across 600 sampled designs. Boxes show quartiles of deterministic objective values evaluated at independent uniform design draws, with median lines and 1.5-interquartile-range whiskers. Outliers are shown. Each panel bins one coordinate, while the other two vary. The samples are neither measured sensor errors nor repeated validation batches.}
+\end{figure}
+
+\section*{Supplementary Analysis S4: Dynamic bias and movement requirements}
+For steps $k=0,\ldots,12$, horizontal parent-centre bias is prescribed as $\mathbf b_k=(80\sin(k\pi/6),40\sin(k\pi/3))$ m. The static layout retains its nominal coordinates and the actual parent centres become $\mathbf s_i^*+(b_{kx},b_{ky},0)$. Ideal compensation subtracts that known bias from each nominal horizontal coordinate. Thus its actual parent centres remain equal to the original optimized centres, and the physical truncation and error scales are unchanged. All compensated nominal positions remain inside the physical box and the pairwise nominal separation remains unchanged.
+
+This experiment demonstrates a deterministic counterfactual under perfect bias knowledge. It does not sample ocean currents, fit an LSTM, solve CFD, simulate actuator dynamics, or establish a real-time guarantee. No physical time interval is assigned to a step. The archived movement total is $\sum_{k,i}\|\mathbf s_{i,k}-\mathbf s_{i,k-1}\|_2$ and is measured in metres. Energy would additionally require a calibrated mapping from trajectory, velocity and operating time to consumption. The experiment is therefore useful for specifying an adaptive extension without confusing a movement proxy with energy measurements.
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS2_dynamic_movement.pdf}
+\caption{Synthetic time-varying bias scenario. (a) Static nominal placement versus ideal compensation with perfect knowledge of the prescribed bias. Invariance of the compensated distribution explains its constant coverage. (b) Cumulative nominal travel summed across all nine sensors. This is not measured or simulated energy consumption.}
+\end{figure}
+
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS3_deployment.pdf}
+\caption{Nominal grid geometries. The fixed layout has pitch 100 m and depth 150 m; the selected optimized layout has pitch approximately 40 m and depth approximately 120 m. Gray outlines indicate the target-volume top and bottom faces. Depth increases downward. These are nominal parent centres rather than realized sensor positions; physical truncation shifts the mean actual depth.}
+\end{figure}
+\FloatBarrier
+
+\section*{Supplementary Analysis S5: Capability and evidence comparison}
+The original comparative feature table is retained as an evidence table. Algorithm names describe the optimization mechanism, not the environmental sensing or control system. Every optimizer in the benchmark receives the same three-dimensional uncertainty model. A claim that PSO or AFSA lacks 3D uncertainty handling would therefore confuse the optimizer with its objective. The table identifies the implemented content and the development needed for broader capabilities.
+
+\begin{table}[htbp]\centering\small
+\caption{Capabilities, evidence and remaining requirements. Numerical results are restricted to implemented experiments. Historical methods without reproducible matched inputs are discussed qualitatively rather than assigned incomparable coverage, runtime or energy values.}
+\begin{tabular}{p{.21\linewidth}p{.35\linewidth}p{.35\linewidth}}\toprule
+Topic retained & Evidence in this revision & Interpretation / remaining work\\\midrule
+Powell deployment & 20 starts, bounded four-variable grid, recorded traces and runtime & Offline structured-array optimization; no free-form global optimality certificate\\
+PSO comparison & 20 matched 600-call runs; explicit update and bounds & Almost identical final coverage in this benchmark; no general ranking\\
+AFSA comparison & 20 matched runs of the specified bounded variant & Sensitive to visual radius, behavior selection and budget; tuning study remains\\
+3D error modeling & Same physically truncated model for all algorithms; spherical event & Not an exclusive capability of one optimizer\\
+Cooperative coverage & Nine-node versus nine-node ablations; pointwise union & Single-sensor comparison reflects resource growth, not optimizer superiority\\
+CFD--LSTM coupling & Mathematical input interface and literature-grounded discussion & Not implemented; needs flow solution, sequences, training and held-out calibration\\
+Adaptive deployment & 13-step known-bias compensation example & Idealized scenario; no online estimator, actuator or real-time controller\\
+Energy / movement & Reproducible nominal-distance proxy for compensation & No joule-valued energy model or measured energy advantage\\
+Redundancy & Overlap is included by union probability & No ``zero redundancy'' claim or algorithm-specific redundancy percentage\\
+Digital-twin / historical static methods & Context and extension requirements retained in discussion & No unmatched literature numbers presented as controlled baselines\\\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Supplementary Methods S6: Reproduction and file inventory}
+From the package directory, run the following commands after installing the versions listed in \texttt{requirements.txt}:
+\begin{verbatim}
+python code/run_experiments.py
+python code/make_figures.py
+python code/prepare_tables.py
+\end{verbatim}
+The source uses NumPy, SciPy, pandas and Matplotlib. The environment JSON records actual versions and processor information. Random generators are NumPy's default generators with explicit seeds. Figures are exported as vector PDFs and 320 dpi PNGs.
+
+The \texttt{data} directory contains the parameter manifest, optimizer outcomes and complete best-so-far traces, Monte Carlo batch counts, bit-packed trial outcomes, quadrature refinement, parameter sweeps, uncertainty sensitivity, sampled designs, coverage maps, optimized coordinates, aggregation audit and the synthetic bias scenario. Each bit-packed Monte Carlo row has exactly 50,000 valid trial bits; unpack the named layout array using \texttt{numpy.unpackbits} and retain the first 50,000 bits. Layouts within a repetition are paired and repetitions are independent. No original rectangular-event result is relabeled as a newly calculated spherical-coverage result.
+
+The confirmed original PDF and all original LaTeX images are retained in \texttt{Original\_Project}. They are an archival revision record and are not part of the corrected experimental evidence. The Chinese revision map identifies the revised location of each original analysis and figure. The public GitHub repository contains the executable project. A code-release DOI from a recognized repository must still be supplied before journal submission.
+
+\section*{Supplementary Validation S7: Preserved synthetic validation figure}
+The full synthetic validation figure is preserved here to keep the main paper within six figures and two tables while adding a real-ocean figure. Monte Carlo confidence intervals and deterministic quadrature refinement remain distinct quantities.
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/fig5_validation.pdf}
+\caption{\textbf{Independent validation and quadrature refinement.} (a) Monte Carlo means and 95\% Student-$t$ intervals across 30 independent batches, compared with the finest quadrature. (b) Absolute changes from the finest quadrature value for three layouts. The two panels distinguish sampling uncertainty from numerical refinement. Error bars do not represent variability across deterministic grid points.}\label{fig:Svalidation}
+\end{figure}
+\FloatBarrier
+\section*{Supplementary Methods S8: Real-current inputs and full results}
+The source is Mercator Ocean International's public OceanBench historical GLORYS12V1 $1^\circ$ derivative. It is reanalysis forcing, not observed sensor-position error. The archived two original depth layers bracket 150 m. Exact source-chunk hashes and original metadata identify the data even though the archive does not report an upstream release identifier. The original CMEMS reference did not specify individual files; this revision supplies an explicit dataset specification.
+\begin{table}[htbp]\centering\small
+\caption{Real-current sites and chronological records. West longitude is negative in the table. Every record is finite; no temporal interpolation or imputation is used. Horizontal cells are selected exactly from the public derivative.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_sites}}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Held-out 2019 mean coverage under 600 s current replay. Gain is relative to the same nine-node fixed grid. Temporal intervals use 2,000 circular moving-block draws with 14-day blocks. These describe environmental-record variation, not Monte Carlo sampling error.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_coverage}}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Independent Monte Carlo validation for real-current replay. Each layout and site has 30 batches of 50,000 full target--array trials. A held-out day is sampled per trial and shared across the array. MC intervals use independent batch estimates; quadrature evaluates all 365 days.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_mc}}
+\end{table}
+\FloatBarrier
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS5_ocean_forcing.pdf}
+\caption{Actual downloaded 2018--2019 current forcing. Time series use eastward and northward velocities; the dashed line marks the chronological split. Speed-density panels show training and test distributions. Velocities are linearly interpolated in depth only to 150 m. Densities have units s/m; they are not localization-error densities.}
+\end{figure}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS6_ocean_sensitivity.pdf}
+\caption{Held-out coverage stress tests for fixed selected layouts. Top panels vary the assumed frozen-current horizon, with residual horizontal scale 120 m. Bottom panels vary residual horizontal parent scale at a 600 s horizon. No layout is reselected from test-year results; the assumed parameters are not estimated from the current records.}
+\end{figure}
+\FloatBarrier
+\begin{table}[htbp]\centering\small
+\caption{Twenty repeated planning runs per method and site, under the same 300-call allowance. Final coverage here is refined \emph{training-state} coverage, not held-out coverage. SD is between-start variability. Runtime is measured offline and excludes refined reevaluation. All initialization and exploratory calls are counted.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_algorithms}}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Training-selected designs for all four optimizers. Each method's selected seed maximizes its refined 2018 representative-state objective. The complete nine-node coordinates are archived in \texttt{selected\_coordinates.csv}; this table gives the four parameters that generate them.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_designs}}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Representative-state approximation diagnostic at fixed selected layouts. All entries use the fine numerical rule and only training-year dates. The full 365-date average provides the comparison for the 16- and 32-state reductions. Differences are approximation diagnostics rather than Monte Carlo uncertainty.}
+\resizebox{\linewidth}{!}{\input{generated/ocean_states}}
+\end{table}
+\begin{table}[htbp]\centering\small
+\caption{Transfer of the training-year current-aware Powell layout compared with the synthetic optimum in the held-out year. Positive values favor current-aware planning; negative values retain the observed transfer failure. Intervals resample paired daily differences using the same 14-day, 2,000-draw circular bootstrap. They quantify variation within the empirical test record rather than guarantees for another ocean year.}
+\input{generated/ocean_transfer}
+\end{table}
+\FloatBarrier
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/figS7_ocean_algorithms.pdf}
+\caption{All repeated optimizer outcomes for the real-current planning problem. Each row corresponds to a site; columns show median/IQR best training traces, refined training-score distributions and measured optimization times. Points are independent initializations. Poor runs and early termination are retained. Held-out coverage is reported separately and is not used for choosing an initialization.}
+\end{figure}
+\FloatBarrier
+\section*{Supplementary Reproducibility S9: Formula and input audit}
+The Formula, Pseudocode and Source Code Companion gives the complete F01--F27 inventory, including confidence intervals, gain definitions, optimizer updates, synthetic bias, movement proxy, current displacement, conditional averaging, clustering and temporal bootstrap. An uncalibrated energy interface is prospective and raises an error without a joule-valued input. \texttt{test\_formulas.py}, \texttt{verify\_results.py} and \texttt{verify\_ocean\_results.py} check mathematical contracts, source extraction, raw trial counts, nominal constraints, training-only selection, numerical refinement and independent validation. No current record is substituted with synthetic forcing.
+\end{document}
+

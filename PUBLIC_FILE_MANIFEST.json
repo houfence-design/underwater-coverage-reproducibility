@@ -1,0 +1,380 @@
+[
+  {
+    "path": ".github/workflows/reproducibility.yml",
+    "bytes": 423,
+    "sha256": "80c5b81ea8da0eb02035efd2fee2d6e980fc9a2cfee1a89064cdbe09d047ab9b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": ".gitignore",
+    "bytes": 285,
+    "sha256": "ec0c0eb7d748e1a092fc667bd4eceb030aa62df14df2a8b8cf044950195f7b1b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "CITATION.cff",
+    "bytes": 1075,
+    "sha256": "e27f692d3bb5231e408bbff1c0a33950b6fce3d255da18f3232d5fcd9f063048",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/build_formula_companion.py",
+    "bytes": 19533,
+    "sha256": "bafb4e9162a9931f82d61689aa4a1faf8694e98a41336cca8d105bcc8fe56633",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/build_paper.py",
+    "bytes": 1030,
+    "sha256": "487b46603888df09fe9515f12c906287432e16d4e5f33042bdbb29811235b1b0",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/download_cmems.py",
+    "bytes": 5609,
+    "sha256": "936291320d9b0d24dcf9a3c6e1bde766016d0f439aed534b22e68297b61c6a64",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/download_public_cmems.py",
+    "bytes": 8857,
+    "sha256": "955207ca6430fa05845e1ed74b217160c3753aa31bd0fa8169e9b7c30b6cce1a",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/formula_reference.py",
+    "bytes": 6333,
+    "sha256": "26480a7adbd119ce42f6086493026e4c7498e9487af552520a471c13b8f2fd33",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/make_figures.py",
+    "bytes": 12675,
+    "sha256": "7d9481668af86ef5fbc50c26e96a8ec628869f28a34385d14df5e09a82c69b53",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/make_ocean_figures.py",
+    "bytes": 6372,
+    "sha256": "c296533d9bdd5b6c137af8f5d5f8f6512f6ba8cf9288b5e42a8b69cb6229e24b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/prepare_ocean_tables.py",
+    "bytes": 4076,
+    "sha256": "23b6f1b37278423dc0b0085e6e42595c34a7da109df548f0b5bb07369ae137ea",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/prepare_tables.py",
+    "bytes": 6489,
+    "sha256": "f2ef029d47e743e85c62a90fb24996011047ad4e3053534060d41cb048575357",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/reproduce.py",
+    "bytes": 1861,
+    "sha256": "eb5c2ef251e91df29d1b127ce667af5caeb08dd18dae6f4016099a68b01e37dc",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/run_experiments.py",
+    "bytes": 12649,
+    "sha256": "a97fe6a7710616436eb35b0498f7ec48366454730ffa49da0c92487e3e21b4d5",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/run_ocean_experiments.py",
+    "bytes": 12462,
+    "sha256": "120f555798551a70cdd42326ccbc35b2f0336a66c37f430064cd21e53a785b7c",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/test_formulas.py",
+    "bytes": 3999,
+    "sha256": "c31b19062c26cfd891f55ff36087a02b2543794e26db310948fe9b3e9632f955",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/verify_ocean_results.py",
+    "bytes": 5771,
+    "sha256": "aa9a17a42327772a0ac7ac70b010b61fefe02ec62aac80de529b79a6c71d0b26",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "code/verify_results.py",
+    "bytes": 3145,
+    "sha256": "06fd5ecee4cfc5c4364eb68972fa3e213941f8f7e02bb9b31cb5163d6bc15a4b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "DATA_LICENSE_AND_PROVENANCE.md",
+    "bytes": 2772,
+    "sha256": "bd1cc9e866340dc3a999eb5f9d398cf56c7e2cbcaed1c96592f1007fecffb2b5",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "FIGURE_DATA_PROVENANCE.md",
+    "bytes": 4226,
+    "sha256": "2785c596a77bd7f238940c3f11f2d26be5cd4a9560b92337039f759f45d21561",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "formula_registry.json",
+    "bytes": 31027,
+    "sha256": "003eef2cb92b5ab2a9aef437b33d888f5c29a960060d6e04f483ce7b199b4839",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "FORMULAS_AND_PSEUDOCODE.md",
+    "bytes": 18571,
+    "sha256": "566e41b61e99821b3b18c26946a756b66ed0ec31c8825cca641d1fd441a4c4ca",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "frozen_data.zip",
+    "bytes": 10025696,
+    "sha256": "d68ee618036a61cb1c73864139de9b30c37d827cf5df734b6946b29f3b4411ca",
+    "encoding": "base64"
+  },
+  {
+    "path": "legacy_support/10) solve2-10-\u95ee\u9898\u4e8c-##\u4ee3\u7801\u8fd0\u884c\u5b8c\u4f1a\u5206\u5e03\u7684\u6563\u70b9\u56fe\u548c\u4e2a\u70b9\u6570\u503c\u65b9\u4fbf\u4ee3\u5165SPSS\u6c42\u89e3.py",
+    "bytes": 3887,
+    "sha256": "bbbdc4bbc8e9fd21ca483d1d6a498e35ecf3b4e08e13a6e3f0964ae17bb51894",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/11) solve2-max-\u95ee\u9898\u4e8c-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "bytes": 2613,
+    "sha256": "e09a184f6c2072f30096c044a1811bcf01e1d9a774d110ff8763fe7015a7e0fd",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/12) solve3-max-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "bytes": 3396,
+    "sha256": "1cb3856476f9e4c0f9f74f8477aad4b26af43ddb2e425d58afb48a2e960a75cf",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/13) \u95ee\u9898\u4e09 \u7528Python\u6c42\u95ee\u9898\u4e09\u7684.py",
+    "bytes": 3871,
+    "sha256": "a5b7516c4907393ec33216985488df3c66b701e76a0cca1f4871e076bc64bcc7",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/2(1).py",
+    "bytes": 1099,
+    "sha256": "022b893254e5cc9f5d0629676b065b0d38255b0bdd6e5df8a6a658b627cf4605",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/2(2).py",
+    "bytes": 1980,
+    "sha256": "cd7e0b4f22f46cab41fa0a8a3c7dc358a202dbffdbba5a7548e062e90c0a9973",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/7) solve1-max-\u95ee\u98981-##\u4ee3\u7801\u6839\u636e\u9884\u6d4b\u6700\u5927\u503c\u7684\u5750\u6807\u8ba1\u7b97\u5c40\u90e8\u6700\u4f18\u89e3.py",
+    "bytes": 2007,
+    "sha256": "b9ed4e32c3425d6be1068012417def39dfafa00bd03ba74b8618a38fb6610ef7",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/8) solve1-\u95ee\u98981##\u4ee3\u7801\u8fd0\u884c\u5b8c\u4f1a\u51fa\u73b0\u5206\u5e03\u7684\u6563\u70b9\u56fe\u548c\u4e2a\u70b9\u6570\u503c\u65b9\u4fbf\u4ee3\u5165SPSS\u6c42\u89e3.py",
+    "bytes": 2303,
+    "sha256": "0ae25a7aa0896429d3cea640d2b65da0ceebb5fafc057683e7a4a290248780d2",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/9) display_truncated_normal_f-\u95ee\u9898\u4e8c-##\u6b64\u4ee3\u7801\u8fd0\u884c\u5b8c\u540e\u4f1a\u51fa\u73b0\u5355\u8fb9\u622a\u5c3e\u6b63\u6001\u5206\u5e03\u6563\u70b9\u56fe.py",
+    "bytes": 3605,
+    "sha256": "8bcf56bde66488fb7ba278d17305e5043df8908807301fb26bdf480cd14aeff1",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "legacy_support/README.md",
+    "bytes": 566,
+    "sha256": "6db8c26fd293e06e92d9b6b4d5278ec4d66ee9e2b3c0c9cfbc96ff0a9d3d3280",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "LICENSE",
+    "bytes": 1387,
+    "sha256": "7ccc7a7309f168988c46d765c26c5dcff69462c3bf07d28fb37c7c97538fd328",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/formula_code_companion.tex",
+    "bytes": 26307,
+    "sha256": "e4848da5e2e30677db72aafe89786246e82bedb0be3f59d3e1053587e7accd84",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/aggregation.tex",
+    "bytes": 408,
+    "sha256": "ebf32e2eaf56b404853c0ccf16592a600376b2963d9dce2bf35c377976279aa6",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/algorithms.tex",
+    "bytes": 375,
+    "sha256": "74027dd6d0d2f42ec976d80511938eeba26e8c4b94fe1f05a20f75d6e5d7a168",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/coordinates.tex",
+    "bytes": 539,
+    "sha256": "fb7c555754f5fb9502512c91f1601622bc57febc63922395059b52903ed873e1",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/coverage.tex",
+    "bytes": 463,
+    "sha256": "66db9d84ead8283a2d28286bb46adcd0aed0fa1a7640bd68657cb2c6f845c91e",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/horizontal.tex",
+    "bytes": 330,
+    "sha256": "30df3902f00877e2770091a5b71f4e0c5eacb9b091edfaed23bd837c03ae5a0e",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/numbers.tex",
+    "bytes": 335,
+    "sha256": "1b89b06034175bc39946929c52c85af7c824016e56cd079b8292ba1a5998d920",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_algorithms.tex",
+    "bytes": 1012,
+    "sha256": "05a575ff438f0173c40c51e091160971063be833383f8deacc8dd0bccba54f0b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_coverage.tex",
+    "bytes": 415,
+    "sha256": "52a4739c20b6d2965d84810d158f9fa69498d7e6ba234e954e6b73bd55b09ba4",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_designs.tex",
+    "bytes": 1017,
+    "sha256": "671717850def25439d00ff6c58d2347b5500f53139e2431022137b64f374c5ef",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_mc.tex",
+    "bytes": 766,
+    "sha256": "7bcce61f9c93100e0cbc751f71cbe8c99c2cfdc78913fba0a6afac9776f4afe4",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_numbers.tex",
+    "bytes": 682,
+    "sha256": "6643cd6376b88fefcd93b604d1e9bd427588a32cd3c40e719096cdc03b79fe41",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_sites.tex",
+    "bytes": 369,
+    "sha256": "5dc2da1ba7ba0c8e8a4723115c681fa4a8d7d54217d3c4af716340d3bcd1d60b",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_states.tex",
+    "bytes": 714,
+    "sha256": "a8a21cce3a8813a7d72a551b844204de2226bd1dee6700532a3b3bdd7890978d",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/ocean_transfer.tex",
+    "bytes": 296,
+    "sha256": "62395ca144d5ac8471eac7ed665f6ca808ed97858266e7176ce39c8160701fdb",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/generated/quadrature.tex",
+    "bytes": 326,
+    "sha256": "94aa74aea0a6e26630b02fac9e691fef5a02aac3c4bb4e6c3c41d575727e4346",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/jabbrv-ltwa-all.ldf",
+    "bytes": 49107,
+    "sha256": "af218569e01a300ec7ddceabfba04fefd9a826c3759393ddcd4ac894bc904ea5",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/jabbrv-ltwa-en.ldf",
+    "bytes": 268657,
+    "sha256": "a6ec2fbd6a397adcbbc4de0bdb1acf6b35dfb0ee7a558a6bf66c50c96750f201",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/jabbrv.sty",
+    "bytes": 15480,
+    "sha256": "79110f7efbc1860f7b12477c2f1ae36edf3e44922203dff820a4fef3cc5de4d1",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/main.tex",
+    "bytes": 61252,
+    "sha256": "18601393e753fb6dad34e9e327abcf16f165ac5cacc83ca9f8c8c066cc845d0c",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/naturemag-doi.bst",
+    "bytes": 36153,
+    "sha256": "df0d948e8b09dedd5ed071af1c7740ed616106e879111f304967e31a87b238a9",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/references.bib",
+    "bytes": 9289,
+    "sha256": "80626001e5b06ec6854e5033adb6338577599a257ad24f82d06e2a9e611bd6a4",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/supplementary.tex",
+    "bytes": 21777,
+    "sha256": "47717f533f37ac837e5d9b7a9c8526a37b562aa29d99cd8718e0b5115cc714ca",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "paper/wlscirep.cls",
+    "bytes": 5824,
+    "sha256": "c7a941c3e4c3e9bc20c94a47113562a724b82d7da700a4891960ad9957efeb98",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "README.md",
+    "bytes": 5484,
+    "sha256": "f13e73de8af62847559ed0d121c193a2cb7662ddb7c44618b5a121c946a531d4",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "reference_audit.md",
+    "bytes": 1987,
+    "sha256": "c5f8e006846e27555e0619734130fa274ee2c88b0bbc534ccc64c279aff1ec89",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "requirements-lock.txt",
+    "bytes": 1546,
+    "sha256": "5c22415320b722a4868d345a81bc3761a91e2666304fda1950cb262ad385424c",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "requirements.txt",
+    "bytes": 165,
+    "sha256": "92bef16286cb8da4e06ca065bdbb18fca268c0a72bda9ff83bcf0ed1767f5b1d",
+    "encoding": "utf-8"
+  },
+  {
+    "path": "ZENODO_METADATA.json",
+    "bytes": 2172,
+    "sha256": "9e3d11a63f55443369b9a2bb9c94b69e95e32feb842c94e9f7048b4b2608f266",
+    "encoding": "utf-8"
+  }
+]

@@ -1,0 +1,830 @@
+[
+  {
+    "id": "F01",
+    "title": "Domains and volume",
+    "manuscript_location": "Main Eq. (1), domain dimensions",
+    "formula_latex": "\\Omega=\\prod_{k=1}^{3}[a_k,b_k],\\qquad |\\Omega|=\\prod_{k=1}^{3}(b_k-a_k)",
+    "functions": [
+      "formula_reference.domain_volume",
+      "run_experiments.quad"
+    ],
+    "pseudocode": [
+      "Check that each upper bound exceeds its lower bound.",
+      "Multiply the three positive side lengths.",
+      "For target averaging, normalize each one-dimensional quadrature weight by its side length."
+    ],
+    "units": "Bounds: m; volume: m cubed; normalized weights: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "domain_volume",
+        "start_line": 13,
+        "end_line": 17
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "quad",
+        "start_line": 28,
+        "end_line": 34
+      }
+    ]
+  },
+  {
+    "id": "F02",
+    "title": "Gaussian density and physical truncation",
+    "manuscript_location": "Main Eq. (2)",
+    "formula_latex": "\\phi(v)=\\frac{e^{-v^2/2}}{\\sqrt{2\\pi}},\\quad Z=\\Phi(\\beta)-\\Phi(\\alpha),\\quad f(x)=\\frac{\\phi((x-\\mu)/\\sigma)}{\\sigma Z}\\mathbf1_{[a,b]}(x)",
+    "functions": [
+      "formula_reference.normal_pdf",
+      "formula_reference.truncation_normalizer",
+      "formula_reference.truncated_density"
+    ],
+    "pseudocode": [
+      "Set alpha = (a - mu)/sigma and beta = (b - mu)/sigma.",
+      "Compute the Gaussian probability mass between the bounds.",
+      "When alpha is positive, use Phi(-alpha) - Phi(-beta) to avoid cancellation.",
+      "Evaluate the parent density and divide by sigma times the normalizer; return zero outside the bounds."
+    ],
+    "units": "Density: inverse m; sigma: m; Z: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "normal_pdf",
+        "start_line": 19,
+        "end_line": 21
+      },
+      {
+        "path": "code/formula_reference.py",
+        "function": "truncation_normalizer",
+        "start_line": 23,
+        "end_line": 28
+      },
+      {
+        "path": "code/formula_reference.py",
+        "function": "truncated_density",
+        "start_line": 30,
+        "end_line": 33
+      }
+    ]
+  },
+  {
+    "id": "F03",
+    "title": "Actual-depth mean and additive error",
+    "manuscript_location": "Main Eq. (3), actual-minus-nominal definition",
+    "formula_latex": "\\mathbb E[S_z]=s_z+\\sigma_z\\frac{\\phi(\\alpha_z)-\\phi(\\beta_z)}{Z_z},\\qquad\\mathbb E[\\varepsilon_z]=\\mathbb E[S_z]-s_z",
+    "functions": [
+      "formula_reference.truncated_mean"
+    ],
+    "pseudocode": [
+      "Evaluate the density at standardized lower and upper bounds.",
+      "Divide their difference by the truncation normalizer and multiply by sigma.",
+      "Add the parent centre to obtain the actual mean.",
+      "Subtract the nominal centre to obtain the mean additive error."
+    ],
+    "units": "All depths and errors: m.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "truncated_mean",
+        "start_line": 35,
+        "end_line": 38
+      }
+    ]
+  },
+  {
+    "id": "F04",
+    "title": "Joint coordinate density",
+    "manuscript_location": "Main text after Eq. (3)",
+    "formula_latex": "f_i(\\mathbf x)=\\prod_{k\\in\\{x,y,z\\}}f_{ik}(x_k)",
+    "functions": [
+      "formula_reference.joint_density"
+    ],
+    "pseudocode": [
+      "Evaluate the three bounded marginal densities.",
+      "Multiply them only under the declared coordinate-independence assumption."
+    ],
+    "units": "Joint density: inverse m cubed.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "joint_density",
+        "start_line": 40,
+        "end_line": 42
+      }
+    ]
+  },
+  {
+    "id": "F05",
+    "title": "Spherical sensing probability",
+    "manuscript_location": "Main Eq. (4)",
+    "formula_latex": "p_i(\\mathbf q)=\\int_{\\mathcal F}\\mathbf1_{\\{\\|\\mathbf x-\\mathbf q\\|\\le R\\}}f_i(\\mathbf x)\\,d\\mathbf x",
+    "functions": [
+      "run_experiments.pointwise",
+      "formula_reference.spherical_hit"
+    ],
+    "pseudocode": [
+      "Define the Euclidean sphere event, not a bounding cuboid.",
+      "Intersect the sphere with physical depth bounds.",
+      "Evaluate the equivalent disk-CDF/depth integral described in F09 and F10."
+    ],
+    "units": "Probability: dimensionless; distance and radius: m.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_experiments.py",
+        "function": "pointwise",
+        "start_line": 41,
+        "end_line": 56
+      },
+      {
+        "path": "code/formula_reference.py",
+        "function": "spherical_hit",
+        "start_line": 44,
+        "end_line": 46
+      }
+    ]
+  },
+  {
+    "id": "F06",
+    "title": "Pointwise network union",
+    "manuscript_location": "Main Eq. (5)",
+    "formula_latex": "P(\\mathbf q)=1-\\prod_i(1-p_i(\\mathbf q))",
+    "functions": [
+      "formula_reference.pointwise_union",
+      "run_experiments.objective"
+    ],
+    "pseudocode": [
+      "At the same target point, collect every sensor probability.",
+      "Multiply their complements across sensors.",
+      "Subtract the product from one.",
+      "Repeat for every target point before any spatial averaging."
+    ],
+    "units": "Dimensionless; independent sensors, or conditional independence given a common current.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "pointwise_union",
+        "start_line": 48,
+        "end_line": 50
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "objective",
+        "start_line": 57,
+        "end_line": 59
+      }
+    ]
+  },
+  {
+    "id": "F07",
+    "title": "Expected covered volume and numerical target averaging",
+    "manuscript_location": "Main Eq. (6) and Fubini interpretation",
+    "formula_latex": "C=\\frac1{|\\Omega|}\\int_\\Omega P(\\mathbf q)\\,d\\mathbf q=\\frac{\\mathbb E[|\\Omega\\cap\\bigcup_i B(\\mathbf S_i,R)|]}{|\\Omega|}\\simeq\\sum_jw_jP(\\mathbf q_j)",
+    "functions": [
+      "run_experiments.quad",
+      "formula_reference.spatial_average",
+      "run_experiments.objective"
+    ],
+    "pseudocode": [
+      "Build tensor-product Gauss--Legendre target points and weights.",
+      "Check that the weights sum to one.",
+      "Compute a network union separately at each point.",
+      "Return the weighted sum of these unions."
+    ],
+    "units": "Coverage fraction: dimensionless; multiply by 100 for percent.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_experiments.py",
+        "function": "quad",
+        "start_line": 28,
+        "end_line": 34
+      },
+      {
+        "path": "code/formula_reference.py",
+        "function": "spatial_average",
+        "start_line": 52,
+        "end_line": 56
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "objective",
+        "start_line": 57,
+        "end_line": 59
+      }
+    ]
+  },
+  {
+    "id": "F08",
+    "title": "Aggregation-order covariance audit",
+    "manuscript_location": "Main Eq. (7)",
+    "formula_latex": "C=\\bar p_1+\\bar p_2-\\mathbb E_Q[p_1p_2],\\quad 1-(1-\\bar p_1)(1-\\bar p_2)-C=\\operatorname{Cov}_Q(p_1,p_2)",
+    "functions": [
+      "formula_reference.covariance_audit"
+    ],
+    "pseudocode": [
+      "Compute each spatial mean and the spatial mean of their product.",
+      "Evaluate correct pointwise-union averaging.",
+      "Evaluate the product-of-spatial-means shortcut.",
+      "Check that shortcut minus correct equals the spatial covariance."
+    ],
+    "units": "Dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "covariance_audit",
+        "start_line": 58,
+        "end_line": 65
+      }
+    ]
+  },
+  {
+    "id": "F09",
+    "title": "Horizontal noncentrality and disk probability",
+    "manuscript_location": "Main Eq. (8)",
+    "formula_latex": "\\eta_i(\\mathbf q)=\\frac{(q_x-s_{ix})^2+(q_y-s_{iy})^2}{\\sigma_h^2},\\quad F_{\\chi^2_2(\\eta_i)}(r^2/\\sigma_h^2)",
+    "functions": [
+      "formula_reference.horizontal_noncentrality",
+      "run_experiments.pointwise"
+    ],
+    "pseudocode": [
+      "Divide squared horizontal separation by parent horizontal variance.",
+      "Evaluate a noncentral chi-square CDF with two degrees of freedom.",
+      "Normalize by the horizontal physical-conditioning mass."
+    ],
+    "units": "Dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "horizontal_noncentrality",
+        "start_line": 67,
+        "end_line": 69
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "pointwise",
+        "start_line": 41,
+        "end_line": 56
+      }
+    ]
+  },
+  {
+    "id": "F10",
+    "title": "Depth integration and zero-depth limit",
+    "manuscript_location": "Main Eq. (9), following zero-scale expression",
+    "formula_latex": "\\ell=\\max(a_z,q_z-R),\\quad h=\\max(\\ell,\\min(b_z,q_z+R)),\\quad p_i=\\frac1{Z_{ix}Z_{iy}}\\int_\\ell^h F_{\\chi^2_2(\\eta_i)}\\!\\left(\\frac{R^2-(q_z-z)^2}{\\sigma_h^2}\\right)f_{iz}(z)\\,dz",
+    "functions": [
+      "formula_reference.depth_limits",
+      "run_experiments.pointwise"
+    ],
+    "pseudocode": [
+      "Clip the depth interval to the sphere and physical bounds.",
+      "Map Gauss--Legendre nodes into this interval.",
+      "At each depth compute the horizontal disk CDF times the bounded depth density.",
+      "Multiply by interval-scaled quadrature weights and horizontal normalization.",
+      "If sigma_z is zero, use the disk at nominal depth directly; retain volume averaging."
+    ],
+    "units": "Integration depth: m; final probability: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "depth_limits",
+        "start_line": 71,
+        "end_line": 74
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "pointwise",
+        "start_line": 41,
+        "end_line": 56
+      }
+    ]
+  },
+  {
+    "id": "F11",
+    "title": "Structured grid and nominal separation",
+    "manuscript_location": "Main Eq. (10)",
+    "formula_latex": "\\mathbf s_{ij}=(c_x+id,c_y+jd,z_0),\\quad i,j\\in\\{-1,0,1\\},\\quad d\\ge40\\ \\mathrm m",
+    "functions": [
+      "run_experiments.layout"
+    ],
+    "pseudocode": [
+      "Enumerate the nine index pairs (-1, 0, 1) by (-1, 0, 1).",
+      "Construct coordinates at the common nominal depth.",
+      "The smallest distinct grid separation equals the pitch."
+    ],
+    "units": "Coordinates and pitch: m; actual positions are not collision-constrained.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_experiments.py",
+        "function": "layout",
+        "start_line": 39,
+        "end_line": 40
+      }
+    ]
+  },
+  {
+    "id": "F12",
+    "title": "Bounded parameterization and objective",
+    "manuscript_location": "Main Eq. (11) and maximization statement",
+    "formula_latex": "d=40+460\\theta_3,\\quad z_0=120+150\\theta_4,\\quad c_{x,y}=(2\\theta_{1,2}-1)(500-d),\\quad\\max_{\\theta\\in[0,1]^4}C(\\mathcal S(\\theta))",
+    "functions": [
+      "run_experiments.decode",
+      "run_experiments.optimize"
+    ],
+    "pseudocode": [
+      "Map unit-box variables to pitch and depth.",
+      "Map the first two variables to feasible grid-centre coordinates.",
+      "Construct all nine nominal coordinates.",
+      "Evaluate the shared deterministic objective and increment the call counter.",
+      "Retain the best evaluated candidate; stop at the declared limit or Powell tolerance."
+    ],
+    "units": "Optimization variables: dimensionless; decoded coordinates: m.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_experiments.py",
+        "function": "decode",
+        "start_line": 35,
+        "end_line": 38
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "optimize",
+        "start_line": 61,
+        "end_line": 116
+      }
+    ]
+  },
+  {
+    "id": "F13",
+    "title": "Monte Carlo union observation and batch mean",
+    "manuscript_location": "Main Eq. (12)",
+    "formula_latex": "I_{rm}=\\mathbf1_{\\{\\min_i\\|\\mathbf S_{irm}-\\mathbf Q_{rm}\\|\\le R\\}},\\qquad\\widehat C_r=M^{-1}\\sum_{m=1}^{M}I_{rm}",
+    "functions": [
+      "formula_reference.spherical_hit",
+      "run_experiments.main",
+      "run_ocean_experiments.run"
+    ],
+    "pseudocode": [
+      "Draw an independent target uniformly in the monitoring volume.",
+      "Draw the entire array according to the same bounded position model.",
+      "For current replay, draw one held-out current day shared across sensors.",
+      "Return one if at least one sensor is within the spherical radius.",
+      "Average observations in each independent batch; archive packed bits and counts."
+    ],
+    "units": "Bernoulli observations and batch fraction: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "spherical_hit",
+        "start_line": 44,
+        "end_line": 46
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      },
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "run",
+        "start_line": 82,
+        "end_line": 187
+      }
+    ]
+  },
+  {
+    "id": "F14",
+    "title": "Inverse-CDF actual-position sampling",
+    "manuscript_location": "Main Monte Carlo sampling paragraph",
+    "formula_latex": "S=\\mu+\\sigma\\Phi^{-1}\\{\\Phi(\\alpha)+U[\\Phi(\\beta)-\\Phi(\\alpha)]\\},\\quad U\\sim\\mathcal U(0,1)",
+    "functions": [
+      "formula_reference.sample_actual",
+      "run_experiments.main"
+    ],
+    "pseudocode": [
+      "Generate independent uniform variates for each coordinate, sensor and trial.",
+      "Map each variate into the parent-CDF interval between physical bounds.",
+      "Apply the inverse Gaussian CDF and rescale.",
+      "Use the equivalent survival-tail identity for a far-left parent centre."
+    ],
+    "units": "Position: m; uniform variates: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "sample_actual",
+        "start_line": 76,
+        "end_line": 81
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      }
+    ]
+  },
+  {
+    "id": "F15",
+    "title": "Independent-batch confidence intervals",
+    "manuscript_location": "Main Monte Carlo confidence interval paragraph",
+    "formula_latex": "\\bar C\\ \\pm\\ t_{0.975,n-1}\\frac{s_C}{\\sqrt n},\\quad n=30",
+    "functions": [
+      "formula_reference.batch_interval",
+      "run_experiments.main"
+    ],
+    "pseudocode": [
+      "Treat the 30 independent batch estimates as replicates.",
+      "Calculate their sample mean and sample standard deviation.",
+      "Multiply the standard error by the Student-t critical value.",
+      "For paired gains, apply the same calculation to within-batch differences."
+    ],
+    "units": "Fraction; display conversion to percent is explicit.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "batch_interval",
+        "start_line": 83,
+        "end_line": 88
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      }
+    ]
+  },
+  {
+    "id": "F16",
+    "title": "Coverage gain and expected uncovered fraction",
+    "manuscript_location": "Main Results RQ3 and uncovered-volume interpretation",
+    "formula_latex": "G_{\\rm pp}=100(C_o-C_f),\\quad G_{\\rm rel}=100(C_o/C_f-1),\\quad G_{\\rm unc}=100(C_o-C_f)/(1-C_f)",
+    "functions": [
+      "formula_reference.coverage_gains"
+    ],
+    "pseudocode": [
+      "Subtract fixed coverage from optimized coverage for absolute gain.",
+      "Divide by fixed coverage for relative coverage gain.",
+      "Divide the decrease in uncovered fraction by initial uncovered fraction.",
+      "Multiply by 100 and label percentage points versus relative percent correctly."
+    ],
+    "units": "First output: percentage points; remaining outputs: relative percent.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "coverage_gains",
+        "start_line": 90,
+        "end_line": 94
+      }
+    ]
+  },
+  {
+    "id": "F17",
+    "title": "PSO update and bounds",
+    "manuscript_location": "Supplementary Methods S1 PSO expression",
+    "formula_latex": "\\mathbf v\\leftarrow0.7298\\mathbf v+1.49618\\mathbf r_1\\odot(\\mathbf p-\\mathbf u)+1.49618\\mathbf r_2\\odot(\\mathbf g-\\mathbf u)",
+    "functions": [
+      "formula_reference.pso_update",
+      "run_experiments.optimize"
+    ],
+    "pseudocode": [
+      "Draw independent componentwise uniform r1 and r2.",
+      "Update and clip velocity to [-0.2, 0.2].",
+      "Add velocity to position and project to the unit box.",
+      "Zero velocity components whose proposed position crossed a bound.",
+      "Evaluate candidates and update personal/global best records; count initialization."
+    ],
+    "units": "Unit-box coordinates and velocities: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "pso_update",
+        "start_line": 96,
+        "end_line": 102
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "optimize",
+        "start_line": 61,
+        "end_line": 116
+      }
+    ]
+  },
+  {
+    "id": "F18",
+    "title": "AFSA schedule and specified variant",
+    "manuscript_location": "Supplementary Methods S1 AFSA expressions",
+    "formula_latex": "\\rho=n_{\\rm eval}/B,\\quad v=0.5(1-\\rho)+0.05,\\quad h=0.1(1-\\rho)+0.01",
+    "functions": [
+      "formula_reference.afsa_schedule",
+      "run_experiments.optimize"
+    ],
+    "pseudocode": [
+      "Set visual and movement scales from the fraction of consumed calls.",
+      "Find neighbors within the visual radius.",
+      "With 1--12 neighbors, consider an improving best neighbor and evaluate the centroid.",
+      "Try at most three projected uniform-ball prey candidates, stopping at the first improvement.",
+      "Move toward the best eligible target by a capped random step, or use a projected random movement.",
+      "Evaluate the moved point; every exploratory call updates the best-observed bulletin."
+    ],
+    "units": "Unit-box distances: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "afsa_schedule",
+        "start_line": 104,
+        "end_line": 107
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "optimize",
+        "start_line": 61,
+        "end_line": 116
+      }
+    ]
+  },
+  {
+    "id": "F19",
+    "title": "Prescribed synthetic bias and ideal compensation",
+    "manuscript_location": "Main Discussion; Supplementary Analysis S4",
+    "formula_latex": "\\mathbf b_k=(80\\sin(k\\pi/6),40\\sin(k\\pi/3)),\\quad\\mathbf s_{i,k}=\\mathbf s_i^*-(b_{kx},b_{ky},0)",
+    "functions": [
+      "formula_reference.prescribed_bias",
+      "run_experiments.main"
+    ],
+    "pseudocode": [
+      "Generate the declared sinusoidal horizontal bias for steps 0--12.",
+      "Shift actual parent centres for the static layout.",
+      "For ideal compensation, subtract the known bias from nominal coordinates.",
+      "Reevaluate the identical physically truncated coverage law."
+    ],
+    "units": "Bias and position: m; steps have no assigned physical duration.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "prescribed_bias",
+        "start_line": 109,
+        "end_line": 111
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      }
+    ]
+  },
+  {
+    "id": "F20",
+    "title": "Movement-distance proxy",
+    "manuscript_location": "Main Discussion; Supplementary Analysis S4",
+    "formula_latex": "D=\\sum_{k,i}\\|\\mathbf s_{i,k}-\\mathbf s_{i,k-1}\\|_2",
+    "functions": [
+      "formula_reference.movement_distance",
+      "run_experiments.main"
+    ],
+    "pseudocode": [
+      "Take consecutive position differences for each node.",
+      "Compute Euclidean distances and sum across nodes and steps."
+    ],
+    "units": "Metres; this is not energy.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "movement_distance",
+        "start_line": 113,
+        "end_line": 115
+      },
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      }
+    ]
+  },
+  {
+    "id": "F21",
+    "title": "Energy-aware extension interface",
+    "manuscript_location": "Main Discussion energy objective",
+    "formula_latex": "J=C-\\lambda E",
+    "functions": [
+      "formula_reference.energy_penalized_objective"
+    ],
+    "pseudocode": [
+      "Require a separately calibrated energy input measured in joules.",
+      "If it is missing, raise an error instead of generating an energy result.",
+      "Subtract weighted energy from coverage only when that external input is available."
+    ],
+    "units": "E: joules; lambda: inverse joules; J: dimensionless.",
+    "status": "Prospective interface only. No empirical energy advantage is reported.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "energy_penalized_objective",
+        "start_line": 117,
+        "end_line": 120
+      }
+    ]
+  },
+  {
+    "id": "F22",
+    "title": "Frozen-current displacement and parent centre",
+    "manuscript_location": "Main current-replay Methods",
+    "formula_latex": "\\mathbf b_t=\\Delta t(u_t,v_t),\\qquad\\boldsymbol\\mu_{it}=\\mathbf s_i+(b_{tx},b_{ty},0)",
+    "functions": [
+      "formula_reference.current_displacement",
+      "run_ocean_experiments.conditional_coverage"
+    ],
+    "pseudocode": [
+      "Read real eastward and northward daily reanalysis velocities.",
+      "Multiply by the declared horizon in seconds.",
+      "Add the same horizontal displacement to every sensor parent centre.",
+      "Condition residual coordinates on the same physical bounds."
+    ],
+    "units": "Velocity: m/s; horizon: s; derived displacement: m.",
+    "status": "Current forcing is real reanalysis; the displacement rule and residual law are assumptions.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "current_displacement",
+        "start_line": 122,
+        "end_line": 124
+      },
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "conditional_coverage",
+        "start_line": 24,
+        "end_line": 51
+      }
+    ]
+  },
+  {
+    "id": "F23",
+    "title": "Coverage averaged over common environmental forcing",
+    "manuscript_location": "Main current-replay objective",
+    "formula_latex": "C_{\\rm env}=T^{-1}\\sum_{t=1}^{T}\\frac1{|\\Omega|}\\int_\\Omega\\left[1-\\prod_i(1-p_i(\\mathbf q\\mid\\mathbf b_t))\\right]d\\mathbf q",
+    "functions": [
+      "formula_reference.empirical_current_mean",
+      "run_ocean_experiments.conditional_coverage",
+      "run_ocean_experiments.run"
+    ],
+    "pseudocode": [
+      "Condition every sensor probability on the same current state.",
+      "Form the conditional union at each target point.",
+      "Integrate over the target volume.",
+      "Average these complete conditional coverage values across current states.",
+      "Do not multiply sensor complements after unconditional current averaging."
+    ],
+    "units": "Dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "empirical_current_mean",
+        "start_line": 126,
+        "end_line": 131
+      },
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "conditional_coverage",
+        "start_line": 24,
+        "end_line": 51
+      },
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "run",
+        "start_line": 82,
+        "end_line": 187
+      }
+    ]
+  },
+  {
+    "id": "F24",
+    "title": "Temporal block-bootstrap interval",
+    "manuscript_location": "Main current-replay statistical Methods",
+    "formula_latex": "\\widehat G^*_b=T^{-1}\\sum_{j=1}^{T}g_{I_{bj}},\\qquad\\mathrm{CI}=[Q_{.025}(\\widehat G^*),Q_{.975}(\\widehat G^*)]",
+    "functions": [
+      "formula_reference.block_bootstrap_interval"
+    ],
+    "pseudocode": [
+      "Compute the paired daily coverage difference on held-out dates.",
+      "Sample circular block starts with replacement.",
+      "Concatenate 14-day blocks and retain the first 365 indices.",
+      "Repeat 2000 times with a fixed seed and take the percentile endpoints."
+    ],
+    "units": "Fraction; temporal-record variability is distinct from independent Monte Carlo error.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/formula_reference.py",
+        "function": "block_bootstrap_interval",
+        "start_line": 133,
+        "end_line": 139
+      }
+    ]
+  },
+  {
+    "id": "F25",
+    "title": "Conditional spherical integral with drift",
+    "manuscript_location": "Main current-replay Methods, F10 with shifted horizontal centres",
+    "formula_latex": "\\eta_{it}=\\|\\mathbf q_h-\\boldsymbol\\mu_{it,h}\\|^2/\\sigma_h^2,\\qquad Z_{it,k}=\\Phi((b_k-\\mu_{it,k})/\\sigma_k)-\\Phi((a_k-\\mu_{it,k})/\\sigma_k)",
+    "functions": [
+      "run_ocean_experiments.conditional_coverage"
+    ],
+    "pseudocode": [
+      "Construct displaced horizontal parent centres for a bounded chunk of current days.",
+      "Recompute both horizontal physical normalizers for each centre.",
+      "Use F09/F10 with the displaced noncentrality and unchanged depth density.",
+      "Aggregate conditionally using F06/F07; return one coverage value per day."
+    ],
+    "units": "Dimensionless probability and normalizers.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "conditional_coverage",
+        "start_line": 24,
+        "end_line": 51
+      }
+    ]
+  },
+  {
+    "id": "F26",
+    "title": "Training-state reduction and weighted objective",
+    "manuscript_location": "Main current-replay optimization settings",
+    "formula_latex": "w_k=n_k/T_{\\rm train},\\quad\\bar{\\mathbf b}_k=n_k^{-1}\\sum_{t\\in\\mathcal C_k}\\mathbf b_t,\\quad C_K=\\sum_kw_kC(\\mathcal S\\mid\\bar{\\mathbf b}_k)",
+    "functions": [
+      "run_ocean_experiments.training_states",
+      "run_ocean_experiments.run"
+    ],
+    "pseudocode": [
+      "Use only training-year displacements to fit 16 k-means++ representatives.",
+      "Run 60 centroid iterations with seed 6200; assign final nearest-centre labels.",
+      "Divide cluster counts by the training-date count to obtain weights.",
+      "Optimize the weighted conditional coverage with a matched budget.",
+      "Select by refined training coverage; evaluate all held-out dates without tuning.",
+      "Compare 16 and 32 representatives against full-year training evaluation."
+    ],
+    "units": "Centres: m; weights and coverage: dimensionless.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "training_states",
+        "start_line": 53,
+        "end_line": 60
+      },
+      {
+        "path": "code/run_ocean_experiments.py",
+        "function": "run",
+        "start_line": 82,
+        "end_line": 187
+      }
+    ]
+  },
+  {
+    "id": "F27",
+    "title": "Random design sample and coordinate plots",
+    "manuscript_location": "Main design sampling; Supplementary Analysis S3",
+    "formula_latex": "c_x,c_y\\sim\\mathcal U(-160,160),\\quad z_0\\sim\\mathcal U(120,270),\\quad d=40\\ \\mathrm m",
+    "functions": [
+      "run_experiments.main"
+    ],
+    "pseudocode": [
+      "With seed 43210, draw 600 independent feasible design vectors.",
+      "Construct the fixed-pitch grid and evaluate the deterministic objective.",
+      "Group by coordinate intervals for descriptive plots; do not infer significance from meshes."
+    ],
+    "units": "Coordinates: m; coverage: fraction.",
+    "status": "Implemented and checked against mathematical contracts.",
+    "source": [
+      {
+        "path": "code/run_experiments.py",
+        "function": "main",
+        "start_line": 118,
+        "end_line": 208
+      }
+    ]
+  }
+]

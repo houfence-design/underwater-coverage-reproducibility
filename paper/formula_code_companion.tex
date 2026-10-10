@@ -1,0 +1,487 @@
+\documentclass[10pt]{article}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}\usepackage{amsmath,amssymb,hyperref,enumitem}
+\title{Formula, Pseudocode and Source Code Companion}
+\author{Kong Sibo, Hou Xinyu, Jin Guanghao, Zhang Ping and Zhang Shengti}\date{}
+\begin{document}\maketitle
+Stable identifiers F01--F27 cover every displayed equation and computational inline expression in the main paper and Supplementary Information. Source locations are generated directly from the executable Python files. Definitions and assumptions are separated from measurements. The energy interface is prospective and rejects missing calibration. All pseudo-algorithms preserve the union-before-averaging order.
+\section*{F01: Domains and volume}
+Main Eq. (1), domain dimensions
+\begin{gather*}\Omega=\prod_{k=1}^{3}[a_k,b_k],\qquad |\Omega|=\prod_{k=1}^{3}(b_k-a_k)\end{gather*}
+\paragraph{Units.} Bounds: m; volume: m cubed; normalized weights: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 13: \path{domain_volume}
+\item \path{code/run_experiments.py}, line 28: \path{quad}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Check that each upper bound exceeds its lower bound.
+\item Multiply the three positive side lengths.
+\item For target averaging, normalize each one-dimensional quadrature weight by its side length.
+\end{enumerate}
+\newpage
+\section*{F02: Gaussian density and physical truncation}
+Main Eq. (2)
+\begin{gather*}\phi(v)=\frac{e^{-v^2/2}}{\sqrt{2\pi}},\quad Z=\Phi(\beta)-\Phi(\alpha),\quad f(x)=\frac{\phi((x-\mu)/\sigma)}{\sigma Z}\mathbf1_{[a,b]}(x)\end{gather*}
+\paragraph{Units.} Density: inverse m; sigma: m; Z: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 19: \path{normal_pdf}
+\item \path{code/formula_reference.py}, line 23: \path{truncation_normalizer}
+\item \path{code/formula_reference.py}, line 30: \path{truncated_density}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Set alpha = (a - mu)/sigma and beta = (b - mu)/sigma.
+\item Compute the Gaussian probability mass between the bounds.
+\item When alpha is positive, use Phi(-alpha) - Phi(-beta) to avoid cancellation.
+\item Evaluate the parent density and divide by sigma times the normalizer; return zero outside the bounds.
+\end{enumerate}
+\newpage
+\section*{F03: Actual-depth mean and additive error}
+Main Eq. (3), actual-minus-nominal definition
+\begin{gather*}\mathbb E[S_z]=s_z+\sigma_z\frac{\phi(\alpha_z)-\phi(\beta_z)}{Z_z},\qquad\mathbb E[\varepsilon_z]=\mathbb E[S_z]-s_z\end{gather*}
+\paragraph{Units.} All depths and errors: m.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 35: \path{truncated_mean}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Evaluate the density at standardized lower and upper bounds.
+\item Divide their difference by the truncation normalizer and multiply by sigma.
+\item Add the parent centre to obtain the actual mean.
+\item Subtract the nominal centre to obtain the mean additive error.
+\end{enumerate}
+\newpage
+\section*{F04: Joint coordinate density}
+Main text after Eq. (3)
+\begin{gather*}f_i(\mathbf x)=\prod_{k\in\{x,y,z\}}f_{ik}(x_k)\end{gather*}
+\paragraph{Units.} Joint density: inverse m cubed.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 40: \path{joint_density}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Evaluate the three bounded marginal densities.
+\item Multiply them only under the declared coordinate-independence assumption.
+\end{enumerate}
+\newpage
+\section*{F05: Spherical sensing probability}
+Main Eq. (4)
+\begin{gather*}p_i(\mathbf q)=\int_{\mathcal F}\mathbf1_{\{\|\mathbf x-\mathbf q\|\le R\}}f_i(\mathbf x)\,d\mathbf x\end{gather*}
+\paragraph{Units.} Probability: dimensionless; distance and radius: m.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_experiments.py}, line 41: \path{pointwise}
+\item \path{code/formula_reference.py}, line 44: \path{spherical_hit}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Define the Euclidean sphere event, not a bounding cuboid.
+\item Intersect the sphere with physical depth bounds.
+\item Evaluate the equivalent disk-CDF/depth integral described in F09 and F10.
+\end{enumerate}
+\newpage
+\section*{F06: Pointwise network union}
+Main Eq. (5)
+\begin{gather*}P(\mathbf q)=1-\prod_i(1-p_i(\mathbf q))\end{gather*}
+\paragraph{Units.} Dimensionless; independent sensors, or conditional independence given a common current.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 48: \path{pointwise_union}
+\item \path{code/run_experiments.py}, line 57: \path{objective}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item At the same target point, collect every sensor probability.
+\item Multiply their complements across sensors.
+\item Subtract the product from one.
+\item Repeat for every target point before any spatial averaging.
+\end{enumerate}
+\newpage
+\section*{F07: Expected covered volume and numerical target averaging}
+Main Eq. (6) and Fubini interpretation
+\begin{gather*}C=\frac1{|\Omega|}\int_\Omega P(\mathbf q)\,d\mathbf q=\frac{\mathbb E[|\Omega\cap\bigcup_i B(\mathbf S_i,R)|]}{|\Omega|}\simeq\sum_jw_jP(\mathbf q_j)\end{gather*}
+\paragraph{Units.} Coverage fraction: dimensionless; multiply by 100 for percent.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_experiments.py}, line 28: \path{quad}
+\item \path{code/formula_reference.py}, line 52: \path{spatial_average}
+\item \path{code/run_experiments.py}, line 57: \path{objective}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Build tensor-product Gauss--Legendre target points and weights.
+\item Check that the weights sum to one.
+\item Compute a network union separately at each point.
+\item Return the weighted sum of these unions.
+\end{enumerate}
+\newpage
+\section*{F08: Aggregation-order covariance audit}
+Main Eq. (7)
+\begin{gather*}C=\bar p_1+\bar p_2-\mathbb E_Q[p_1p_2],\quad 1-(1-\bar p_1)(1-\bar p_2)-C=\operatorname{Cov}_Q(p_1,p_2)\end{gather*}
+\paragraph{Units.} Dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 58: \path{covariance_audit}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Compute each spatial mean and the spatial mean of their product.
+\item Evaluate correct pointwise-union averaging.
+\item Evaluate the product-of-spatial-means shortcut.
+\item Check that shortcut minus correct equals the spatial covariance.
+\end{enumerate}
+\newpage
+\section*{F09: Horizontal noncentrality and disk probability}
+Main Eq. (8)
+\begin{gather*}\eta_i(\mathbf q)=\frac{(q_x-s_{ix})^2+(q_y-s_{iy})^2}{\sigma_h^2},\quad F_{\chi^2_2(\eta_i)}(r^2/\sigma_h^2)\end{gather*}
+\paragraph{Units.} Dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 67: \path{horizontal_noncentrality}
+\item \path{code/run_experiments.py}, line 41: \path{pointwise}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Divide squared horizontal separation by parent horizontal variance.
+\item Evaluate a noncentral chi-square CDF with two degrees of freedom.
+\item Normalize by the horizontal physical-conditioning mass.
+\end{enumerate}
+\newpage
+\section*{F10: Depth integration and zero-depth limit}
+Main Eq. (9), following zero-scale expression
+\begin{gather*}\ell=\max(a_z,q_z-R),\quad h=\max(\ell,\min(b_z,q_z+R)),\quad p_i=\frac1{Z_{ix}Z_{iy}}\int_\ell^h F_{\chi^2_2(\eta_i)}\!\left(\frac{R^2-(q_z-z)^2}{\sigma_h^2}\right)f_{iz}(z)\,dz\end{gather*}
+\paragraph{Units.} Integration depth: m; final probability: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 71: \path{depth_limits}
+\item \path{code/run_experiments.py}, line 41: \path{pointwise}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Clip the depth interval to the sphere and physical bounds.
+\item Map Gauss--Legendre nodes into this interval.
+\item At each depth compute the horizontal disk CDF times the bounded depth density.
+\item Multiply by interval-scaled quadrature weights and horizontal normalization.
+\item If sigma\_z is zero, use the disk at nominal depth directly; retain volume averaging.
+\end{enumerate}
+\newpage
+\section*{F11: Structured grid and nominal separation}
+Main Eq. (10)
+\begin{gather*}\mathbf s_{ij}=(c_x+id,c_y+jd,z_0),\quad i,j\in\{-1,0,1\},\quad d\ge40\ \mathrm m\end{gather*}
+\paragraph{Units.} Coordinates and pitch: m; actual positions are not collision-constrained.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_experiments.py}, line 39: \path{layout}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Enumerate the nine index pairs (-1, 0, 1) by (-1, 0, 1).
+\item Construct coordinates at the common nominal depth.
+\item The smallest distinct grid separation equals the pitch.
+\end{enumerate}
+\newpage
+\section*{F12: Bounded parameterization and objective}
+Main Eq. (11) and maximization statement
+\begin{gather*}d=40+460\theta_3,\quad z_0=120+150\theta_4,\quad c_{x,y}=(2\theta_{1,2}-1)(500-d),\quad\max_{\theta\in[0,1]^4}C(\mathcal S(\theta))\end{gather*}
+\paragraph{Units.} Optimization variables: dimensionless; decoded coordinates: m.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_experiments.py}, line 35: \path{decode}
+\item \path{code/run_experiments.py}, line 61: \path{optimize}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Map unit-box variables to pitch and depth.
+\item Map the first two variables to feasible grid-centre coordinates.
+\item Construct all nine nominal coordinates.
+\item Evaluate the shared deterministic objective and increment the call counter.
+\item Retain the best evaluated candidate; stop at the declared limit or Powell tolerance.
+\end{enumerate}
+\newpage
+\section*{F13: Monte Carlo union observation and batch mean}
+Main Eq. (12)
+\begin{gather*}I_{rm}=\mathbf1_{\{\min_i\|\mathbf S_{irm}-\mathbf Q_{rm}\|\le R\}},\qquad\widehat C_r=M^{-1}\sum_{m=1}^{M}I_{rm}\end{gather*}
+\paragraph{Units.} Bernoulli observations and batch fraction: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 44: \path{spherical_hit}
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\item \path{code/run_ocean_experiments.py}, line 82: \path{run}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Draw an independent target uniformly in the monitoring volume.
+\item Draw the entire array according to the same bounded position model.
+\item For current replay, draw one held-out current day shared across sensors.
+\item Return one if at least one sensor is within the spherical radius.
+\item Average observations in each independent batch; archive packed bits and counts.
+\end{enumerate}
+\newpage
+\section*{F14: Inverse-CDF actual-position sampling}
+Main Monte Carlo sampling paragraph
+\begin{gather*}S=\mu+\sigma\Phi^{-1}\{\Phi(\alpha)+U[\Phi(\beta)-\Phi(\alpha)]\},\quad U\sim\mathcal U(0,1)\end{gather*}
+\paragraph{Units.} Position: m; uniform variates: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 76: \path{sample_actual}
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Generate independent uniform variates for each coordinate, sensor and trial.
+\item Map each variate into the parent-CDF interval between physical bounds.
+\item Apply the inverse Gaussian CDF and rescale.
+\item Use the equivalent survival-tail identity for a far-left parent centre.
+\end{enumerate}
+\newpage
+\section*{F15: Independent-batch confidence intervals}
+Main Monte Carlo confidence interval paragraph
+\begin{gather*}\bar C\ \pm\ t_{0.975,n-1}\frac{s_C}{\sqrt n},\quad n=30\end{gather*}
+\paragraph{Units.} Fraction; display conversion to percent is explicit.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 83: \path{batch_interval}
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Treat the 30 independent batch estimates as replicates.
+\item Calculate their sample mean and sample standard deviation.
+\item Multiply the standard error by the Student-t critical value.
+\item For paired gains, apply the same calculation to within-batch differences.
+\end{enumerate}
+\newpage
+\section*{F16: Coverage gain and expected uncovered fraction}
+Main Results RQ3 and uncovered-volume interpretation
+\begin{gather*}G_{\rm pp}=100(C_o-C_f),\quad G_{\rm rel}=100(C_o/C_f-1),\quad G_{\rm unc}=100(C_o-C_f)/(1-C_f)\end{gather*}
+\paragraph{Units.} First output: percentage points; remaining outputs: relative percent.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 90: \path{coverage_gains}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Subtract fixed coverage from optimized coverage for absolute gain.
+\item Divide by fixed coverage for relative coverage gain.
+\item Divide the decrease in uncovered fraction by initial uncovered fraction.
+\item Multiply by 100 and label percentage points versus relative percent correctly.
+\end{enumerate}
+\newpage
+\section*{F17: PSO update and bounds}
+Supplementary Methods S1 PSO expression
+\begin{gather*}\mathbf v\leftarrow0.7298\mathbf v+1.49618\mathbf r_1\odot(\mathbf p-\mathbf u)+1.49618\mathbf r_2\odot(\mathbf g-\mathbf u)\end{gather*}
+\paragraph{Units.} Unit-box coordinates and velocities: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 96: \path{pso_update}
+\item \path{code/run_experiments.py}, line 61: \path{optimize}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Draw independent componentwise uniform r1 and r2.
+\item Update and clip velocity to [-0.2, 0.2].
+\item Add velocity to position and project to the unit box.
+\item Zero velocity components whose proposed position crossed a bound.
+\item Evaluate candidates and update personal/global best records; count initialization.
+\end{enumerate}
+\newpage
+\section*{F18: AFSA schedule and specified variant}
+Supplementary Methods S1 AFSA expressions
+\begin{gather*}\rho=n_{\rm eval}/B,\quad v=0.5(1-\rho)+0.05,\quad h=0.1(1-\rho)+0.01\end{gather*}
+\paragraph{Units.} Unit-box distances: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 104: \path{afsa_schedule}
+\item \path{code/run_experiments.py}, line 61: \path{optimize}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Set visual and movement scales from the fraction of consumed calls.
+\item Find neighbors within the visual radius.
+\item With 1--12 neighbors, consider an improving best neighbor and evaluate the centroid.
+\item Try at most three projected uniform-ball prey candidates, stopping at the first improvement.
+\item Move toward the best eligible target by a capped random step, or use a projected random movement.
+\item Evaluate the moved point; every exploratory call updates the best-observed bulletin.
+\end{enumerate}
+\newpage
+\section*{F19: Prescribed synthetic bias and ideal compensation}
+Main Discussion; Supplementary Analysis S4
+\begin{gather*}\mathbf b_k=(80\sin(k\pi/6),40\sin(k\pi/3)),\quad\mathbf s_{i,k}=\mathbf s_i^*-(b_{kx},b_{ky},0)\end{gather*}
+\paragraph{Units.} Bias and position: m; steps have no assigned physical duration.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 109: \path{prescribed_bias}
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Generate the declared sinusoidal horizontal bias for steps 0--12.
+\item Shift actual parent centres for the static layout.
+\item For ideal compensation, subtract the known bias from nominal coordinates.
+\item Reevaluate the identical physically truncated coverage law.
+\end{enumerate}
+\newpage
+\section*{F20: Movement-distance proxy}
+Main Discussion; Supplementary Analysis S4
+\begin{gather*}D=\sum_{k,i}\|\mathbf s_{i,k}-\mathbf s_{i,k-1}\|_2\end{gather*}
+\paragraph{Units.} Metres; this is not energy.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 113: \path{movement_distance}
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Take consecutive position differences for each node.
+\item Compute Euclidean distances and sum across nodes and steps.
+\end{enumerate}
+\newpage
+\section*{F21: Energy-aware extension interface}
+Main Discussion energy objective
+\begin{gather*}J=C-\lambda E\end{gather*}
+\paragraph{Units.} E: joules; lambda: inverse joules; J: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 117: \path{energy_penalized_objective}
+\end{itemize}
+\paragraph{Evidence status.} Prospective interface only. No empirical energy advantage is reported.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Require a separately calibrated energy input measured in joules.
+\item If it is missing, raise an error instead of generating an energy result.
+\item Subtract weighted energy from coverage only when that external input is available.
+\end{enumerate}
+\newpage
+\section*{F22: Frozen-current displacement and parent centre}
+Main current-replay Methods
+\begin{gather*}\mathbf b_t=\Delta t(u_t,v_t),\qquad\boldsymbol\mu_{it}=\mathbf s_i+(b_{tx},b_{ty},0)\end{gather*}
+\paragraph{Units.} Velocity: m/s; horizon: s; derived displacement: m.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 122: \path{current_displacement}
+\item \path{code/run_ocean_experiments.py}, line 24: \path{conditional_coverage}
+\end{itemize}
+\paragraph{Evidence status.} Current forcing is real reanalysis; the displacement rule and residual law are assumptions.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Read real eastward and northward daily reanalysis velocities.
+\item Multiply by the declared horizon in seconds.
+\item Add the same horizontal displacement to every sensor parent centre.
+\item Condition residual coordinates on the same physical bounds.
+\end{enumerate}
+\newpage
+\section*{F23: Coverage averaged over common environmental forcing}
+Main current-replay objective
+\begin{gather*}C_{\rm env}=T^{-1}\sum_{t=1}^{T}\frac1{|\Omega|}\int_\Omega\left[1-\prod_i(1-p_i(\mathbf q\mid\mathbf b_t))\right]d\mathbf q\end{gather*}
+\paragraph{Units.} Dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 126: \path{empirical_current_mean}
+\item \path{code/run_ocean_experiments.py}, line 24: \path{conditional_coverage}
+\item \path{code/run_ocean_experiments.py}, line 82: \path{run}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Condition every sensor probability on the same current state.
+\item Form the conditional union at each target point.
+\item Integrate over the target volume.
+\item Average these complete conditional coverage values across current states.
+\item Do not multiply sensor complements after unconditional current averaging.
+\end{enumerate}
+\newpage
+\section*{F24: Temporal block-bootstrap interval}
+Main current-replay statistical Methods
+\begin{gather*}\widehat G^*_b=T^{-1}\sum_{j=1}^{T}g_{I_{bj}},\qquad\mathrm{CI}=[Q_{.025}(\widehat G^*),Q_{.975}(\widehat G^*)]\end{gather*}
+\paragraph{Units.} Fraction; temporal-record variability is distinct from independent Monte Carlo error.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/formula_reference.py}, line 133: \path{block_bootstrap_interval}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Compute the paired daily coverage difference on held-out dates.
+\item Sample circular block starts with replacement.
+\item Concatenate 14-day blocks and retain the first 365 indices.
+\item Repeat 2000 times with a fixed seed and take the percentile endpoints.
+\end{enumerate}
+\newpage
+\section*{F25: Conditional spherical integral with drift}
+Main current-replay Methods, F10 with shifted horizontal centres
+\begin{gather*}\eta_{it}=\|\mathbf q_h-\boldsymbol\mu_{it,h}\|^2/\sigma_h^2,\qquad Z_{it,k}=\Phi((b_k-\mu_{it,k})/\sigma_k)-\Phi((a_k-\mu_{it,k})/\sigma_k)\end{gather*}
+\paragraph{Units.} Dimensionless probability and normalizers.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_ocean_experiments.py}, line 24: \path{conditional_coverage}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Construct displaced horizontal parent centres for a bounded chunk of current days.
+\item Recompute both horizontal physical normalizers for each centre.
+\item Use F09/F10 with the displaced noncentrality and unchanged depth density.
+\item Aggregate conditionally using F06/F07; return one coverage value per day.
+\end{enumerate}
+\newpage
+\section*{F26: Training-state reduction and weighted objective}
+Main current-replay optimization settings
+\begin{gather*}w_k=n_k/T_{\rm train},\quad\bar{\mathbf b}_k=n_k^{-1}\sum_{t\in\mathcal C_k}\mathbf b_t,\quad C_K=\sum_kw_kC(\mathcal S\mid\bar{\mathbf b}_k)\end{gather*}
+\paragraph{Units.} Centres: m; weights and coverage: dimensionless.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_ocean_experiments.py}, line 53: \path{training_states}
+\item \path{code/run_ocean_experiments.py}, line 82: \path{run}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item Use only training-year displacements to fit 16 k-means++ representatives.
+\item Run 60 centroid iterations with seed 6200; assign final nearest-centre labels.
+\item Divide cluster counts by the training-date count to obtain weights.
+\item Optimize the weighted conditional coverage with a matched budget.
+\item Select by refined training coverage; evaluate all held-out dates without tuning.
+\item Compare 16 and 32 representatives against full-year training evaluation.
+\end{enumerate}
+\newpage
+\section*{F27: Random design sample and coordinate plots}
+Main design sampling; Supplementary Analysis S3
+\begin{gather*}c_x,c_y\sim\mathcal U(-160,160),\quad z_0\sim\mathcal U(120,270),\quad d=40\ \mathrm m\end{gather*}
+\paragraph{Units.} Coordinates: m; coverage: fraction.
+\paragraph{Executable source.}
+\begin{itemize}[leftmargin=*]
+\item \path{code/run_experiments.py}, line 118: \path{main}
+\end{itemize}
+\paragraph{Evidence status.} Implemented and checked against mathematical contracts.
+\paragraph{Pseudocode.}
+\begin{enumerate}[leftmargin=*]
+\item With seed 43210, draw 600 independent feasible design vectors.
+\item Construct the fixed-pitch grid and evaluate the deterministic objective.
+\item Group by coordinate intervals for descriptive plots; do not infer significance from meshes.
+\end{enumerate}
+\end{document}
