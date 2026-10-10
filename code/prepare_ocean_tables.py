@@ -1,13 +1,13 @@
 """Data-driven LaTeX tables and macros for the real-current replay."""
 from pathlib import Path
 import json,numpy as np,pandas as pd
-ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';O=D/'ocean';G=ROOT/'paper'/'generated'
+ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';O=D/'ocean';G=ROOT/'results'/'tables'
 NAMES={'south_china_sea':'South China Sea','kuroshio':'Kuroshio vicinity','north_atlantic':'North Atlantic'}
 def table(name,head,rows,fmt):
     text='\\begin{tabular}{'+fmt+'}\n\\toprule\n'+head+r' \\'+ '\n\\midrule\n'+'\n'.join(' & '.join(map(str,r))+r' \\' for r in rows)+'\n\\bottomrule\n\\end{tabular}\n'
     (G/name).write_text(text,encoding='utf-8')
 def main():
-    G.mkdir(exist_ok=True);s=pd.read_csv(O/'summary.csv');r=pd.read_csv(O/'optimizer_runs.csv')
+    G.mkdir(parents=True,exist_ok=True);s=pd.read_csv(O/'summary.csv');r=pd.read_csv(O/'optimizer_runs.csv')
     meta=json.loads((D/'cmems'/'provenance.json').read_text());rows=[];macros=[]
     for i,site in enumerate(meta['sites']):
         a=s[s.site==site['site']];fixed=a[a.layout=='Fixed'].iloc[0];synthetic=a[a.layout=='Synthetic-optimum'].iloc[0];opt=a[a.layout=='Powell'].iloc[0]

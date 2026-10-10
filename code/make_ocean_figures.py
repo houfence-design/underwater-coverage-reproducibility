@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from make_figures import finish,label
 
-ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';O=D/'ocean';F=ROOT/'paper'/'figures'
+ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';O=D/'ocean';F=ROOT/'results'/'figures'
 SITES=['south_china_sea','kuroshio','north_atlantic']
 NAMES=['South China Sea','Kuroshio vicinity','North Atlantic']
 COLORS={'Fixed':'#777777','Synthetic-optimum':'#d95f02','Powell':'#2166ac','PSO':'#1b9e77','AFSA':'#7570b3','Random':'#b2182b'}

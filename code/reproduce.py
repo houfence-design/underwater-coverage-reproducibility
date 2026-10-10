@@ -21,7 +21,7 @@ def command(name,*args):
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--mode',choices=['verify','figures','full'],default='verify')
-    p.add_argument('--compile',action='store_true');p.add_argument('--redownload-public-currents',action='store_true')
+    p.add_argument('--redownload-public-currents',action='store_true')
     args=p.parse_args();unpack_if_needed()
     if args.redownload_public_currents:command('download_public_cmems.py')
     if args.mode=='full':
@@ -29,7 +29,6 @@ def main():
     command('test_formulas.py');command('verify_results.py');command('verify_ocean_results.py')
     if args.mode in ['figures','full']:
         command('make_figures.py');command('prepare_tables.py')
-        command('make_ocean_figures.py');command('prepare_ocean_tables.py');command('build_formula_companion.py')
-    if args.compile:command('build_paper.py')
+        command('make_ocean_figures.py');command('prepare_ocean_tables.py');command('build_formula_inventory.py')
     print('Requested reproduction mode completed',flush=True)
 if __name__=='__main__':main()

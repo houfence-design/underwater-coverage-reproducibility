@@ -2,7 +2,7 @@ from pathlib import Path
 import json,numpy as np,pandas as pd
 from scipy.special import ndtr
 from run_experiments import layout,pointwise,quad,C
-R=Path(__file__).resolve().parents[1];D=R/'data';P=R/'paper';G=P/'generated';G.mkdir(exist_ok=True)
+R=Path(__file__).resolve().parents[1];D=R/'data';P=R/'results';G=P/'tables';G.mkdir(parents=True,exist_ok=True)
 s=json.loads((D/'summary.json').read_text());runs=pd.read_csv(D/'optimizer_runs.csv');mc=pd.read_csv(D/'mc_batches.csv')
 def table(name,head,rows,fmt):
     text='\\begin{tabular}{'+fmt+'}\n\\toprule\n'+head+r' \\'+ '\n\\midrule\n'+'\n'.join(' & '.join(map(str,r))+r' \\' for r in rows)+'\n\\bottomrule\n\\end{tabular}\n'
@@ -33,24 +33,4 @@ gain=(s['Optimized']['quadrature']-s['Fixed']['quadrature'])*100
 blind=gain/(1-s['Fixed']['quadrature'])
 macros={'FixedCov':f'{s["Fixed"]["quadrature"]*100:.4f}','OptCov':f'{s["Optimized"]["quadrature"]*100:.4f}','AbsGain':f'{gain:.4f}','RelGain':f'{s["relative_gain"]*100:.2f}','BlindGain':f'{blind:.2f}','MCOpt':f'{s["Optimized"]["mc_mean"]*100:.4f}','MCLow':f'{s["Optimized"]["ci_low"]*100:.4f}','MCHigh':f'{s["Optimized"]["ci_high"]*100:.4f}','PairGain':f'{s["paired_gain"]["mean"]*100:.4f}','PairLow':f'{s["paired_gain"]["low"]*100:.4f}','PairHigh':f'{s["paired_gain"]["high"]*100:.4f}'}
 (G/'numbers.tex').write_text('\n'.join('\\newcommand{\\'+k+'}{'+v+'}' for k,v in macros.items()))
-# Primary DOI registry records; replace the erroneous source citations, preserve
-# valid source references and their research topics. Full audit is separate.
-records=json.loads((D/'reference_records.json').read_text());missing={'10.1145/972627.972631':('Sensor deployment and target localization in distributed sensor networks','Zou, Yi and Chakrabarty, Krishnendu','ACM Transactions on Embedded Computing Systems','3','61--91','2004'),'10.1146/annurev-fluid-010719-060214':('Machine Learning for Fluid Mechanics','Brunton, Steven L. and Noack, Bernd R. and Koumoutsakos, Petros','Annual Review of Fluid Mechanics','52','477--508','2020'),'10.1016/j.coastaleng.2024.104532':('Storm surge modeling in the AI era: Using LSTM-based machine learning for enhancing forecasting accuracy','Giaremis, S. and Nader, N. and Dawson, C. and Kaiser, C. and Nikidis, E. and Kaiser, H.','Coastal Engineering','191','104532','2024')}
-keys={'10.1145/972627.972631':'zou2004','10.1109/JOE.2019.2935481':'zhao2020','10.1080/01621459.1949.10483310':'metropolis1949','10.1016/j.engappai.2023.107062':'li2023','10.1016/j.joes.2021.03.001':'murray2022','10.1016/j.oceaneng.2023.115486':'qiu2023','10.1038/s42254-023-00622-y':'vinuesa2023','10.1146/annurev-fluid-010719-060214':'brunton2020','10.1016/j.coastaleng.2024.104532':'giaremis2024','10.1016/j.swevo.2024.101486':'wang2024','10.1109/JIOT.2023.3324392':'zhou2024','10.1126/scirobotics.ade7811':'masmitja2023','10.1038/s42256-020-00272-0':'novati2021','10.1016/j.oceaneng.2025.121980':'dong2025','10.1038/s41467-024-50926-5':'lu2024','10.1016/j.oceaneng.2022.113479':'mauro2023','10.1016/j.adhoc.2005.01.004':'akyildiz2005','10.1145/941350.941367':'huang2003','10.1016/j.jpdc.2004.03.019':'zouuncertainty2004','10.1093/comjnl/7.2.155':'powell1964','10.1109/ICNN.1995.488968':'kennedy1995','10.1109/4235.985692':'clerc2002'}
-keys['10.1109/JOE.2019.2916119']='liu2019'
-bib=[]
-for r in records:
-    doi=r['doi']
-    if doi not in keys:continue
-    if 'error' in r:
-        if doi not in missing:continue
-        title,author,journal,volume,pages,year=missing[doi]
-    else:
-        title=r['title'][0];author=' and '.join(x.get('family','')+', '+x.get('given','') for x in r['authors']);journal=r['journal'][0];volume=r.get('volume') or '';pages=r.get('pages') or r.get('article_number') or '';year=str(r['year'].get('date-parts',[[keys[doi][-4:]]])[0][0])
-    bib.append('@article{'+keys[doi]+',\n  '+',\n  '.join(k+'={'+str(v)+'}' for k,v in [('title','{'+title+'}'),('author',author),('journal',journal),('volume',volume),('pages',pages),('year',year),('doi',doi)])+'\n}')
-bib.append('@article{li2002,author={Li, Xiao Lei and Shao, Zhi Jiang and Qian, Ji Xin},title={An Optimizing Method Based on Autonomous Animats: Fish-swarm Algorithm},journal={Systems Engineering---Theory and Practice},volume={22},number={11},pages={32--38},year={2002},doi={10.12011/1000-6788(2002)11-32}}')
-bib.append('@book{papoulis2002,author={Papoulis, Athanasios and Pillai, S. Unnikrishna},title={Probability, Random Variables, and Stochastic Processes},edition={4},publisher={McGraw-Hill},year={2002}}')
-# Preserve the separately verified marine-data citations on every regeneration.
-bib.append((P/'ocean_references.bib').read_text(encoding='utf-8').strip())
-(P/'references.bib').write_text('\n\n'.join(bib),encoding='utf-8')
-print('Tables, numerical macros and bibliography generated')
+print('Numerical tables and macros generated; no bibliography is produced')

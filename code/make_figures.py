@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch,FancyArrowPatch
 from scipy.special import ndtr,ndtri
 from run_experiments import C,layout,pointwise,quad
-ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';F=ROOT/'paper'/'figures';F.mkdir(exist_ok=True)
+ROOT=Path(__file__).resolve().parents[1];D=ROOT/'data';F=ROOT/'results'/'figures';F.mkdir(parents=True,exist_ok=True)
 plt.rcParams.update({'font.family':'DejaVu Sans','font.size':9,'axes.spines.top':False,'axes.spines.right':False,'axes.labelsize':9,'axes.titlesize':10,'legend.fontsize':8,'pdf.fonttype':42,'savefig.dpi':320})
 colors=['#2166ac','#d95f02','#1b9e77','#7570b3']
 def finish(fig,name):

@@ -1,10 +1,8 @@
-# Formula, pseudocode and executable-code concordance
+# Formula definitions and executable-code inventory
 
-This inventory covers every displayed equation and computational inline expression in the manuscript and Supplementary Information. Numbers F01--F27 are stable identifiers. The implementation locations are generated from the Python abstract syntax tree.
+F01--F27 identify computational definitions, assumptions, units and pseudocode. Source positions are generated from the executable Python syntax tree.
 
 ## F01: Domains and volume
-
-Main Eq. (1), domain dimensions
 
 $$\Omega=\prod_{k=1}^{3}[a_k,b_k],\qquad |\Omega|=\prod_{k=1}^{3}(b_k-a_k)$$
 
@@ -19,8 +17,6 @@ Implemented and checked against mathematical contracts.
 3. For target averaging, normalize each one-dimensional quadrature weight by its side length.
 
 ## F02: Gaussian density and physical truncation
-
-Main Eq. (2)
 
 $$\phi(v)=\frac{e^{-v^2/2}}{\sqrt{2\pi}},\quad Z=\Phi(\beta)-\Phi(\alpha),\quad f(x)=\frac{\phi((x-\mu)/\sigma)}{\sigma Z}\mathbf1_{[a,b]}(x)$$
 
@@ -37,8 +33,6 @@ Implemented and checked against mathematical contracts.
 
 ## F03: Actual-depth mean and additive error
 
-Main Eq. (3), actual-minus-nominal definition
-
 $$\mathbb E[S_z]=s_z+\sigma_z\frac{\phi(\alpha_z)-\phi(\beta_z)}{Z_z},\qquad\mathbb E[\varepsilon_z]=\mathbb E[S_z]-s_z$$
 
 Units: All depths and errors: m.
@@ -54,8 +48,6 @@ Implemented and checked against mathematical contracts.
 
 ## F04: Joint coordinate density
 
-Main text after Eq. (3)
-
 $$f_i(\mathbf x)=\prod_{k\in\{x,y,z\}}f_{ik}(x_k)$$
 
 Units: Joint density: inverse m cubed.
@@ -68,8 +60,6 @@ Implemented and checked against mathematical contracts.
 2. Multiply them only under the declared coordinate-independence assumption.
 
 ## F05: Spherical sensing probability
-
-Main Eq. (4)
 
 $$p_i(\mathbf q)=\int_{\mathcal F}\mathbf1_{\{\|\mathbf x-\mathbf q\|\le R\}}f_i(\mathbf x)\,d\mathbf x$$
 
@@ -84,8 +74,6 @@ Implemented and checked against mathematical contracts.
 3. Evaluate the equivalent disk-CDF/depth integral described in F09 and F10.
 
 ## F06: Pointwise network union
-
-Main Eq. (5)
 
 $$P(\mathbf q)=1-\prod_i(1-p_i(\mathbf q))$$
 
@@ -102,8 +90,6 @@ Implemented and checked against mathematical contracts.
 
 ## F07: Expected covered volume and numerical target averaging
 
-Main Eq. (6) and Fubini interpretation
-
 $$C=\frac1{|\Omega|}\int_\Omega P(\mathbf q)\,d\mathbf q=\frac{\mathbb E[|\Omega\cap\bigcup_i B(\mathbf S_i,R)|]}{|\Omega|}\simeq\sum_jw_jP(\mathbf q_j)$$
 
 Units: Coverage fraction: dimensionless; multiply by 100 for percent.
@@ -118,8 +104,6 @@ Implemented and checked against mathematical contracts.
 4. Return the weighted sum of these unions.
 
 ## F08: Aggregation-order covariance audit
-
-Main Eq. (7)
 
 $$C=\bar p_1+\bar p_2-\mathbb E_Q[p_1p_2],\quad 1-(1-\bar p_1)(1-\bar p_2)-C=\operatorname{Cov}_Q(p_1,p_2)$$
 
@@ -136,8 +120,6 @@ Implemented and checked against mathematical contracts.
 
 ## F09: Horizontal noncentrality and disk probability
 
-Main Eq. (8)
-
 $$\eta_i(\mathbf q)=\frac{(q_x-s_{ix})^2+(q_y-s_{iy})^2}{\sigma_h^2},\quad F_{\chi^2_2(\eta_i)}(r^2/\sigma_h^2)$$
 
 Units: Dimensionless.
@@ -151,8 +133,6 @@ Implemented and checked against mathematical contracts.
 3. Normalize by the horizontal physical-conditioning mass.
 
 ## F10: Depth integration and zero-depth limit
-
-Main Eq. (9), following zero-scale expression
 
 $$\ell=\max(a_z,q_z-R),\quad h=\max(\ell,\min(b_z,q_z+R)),\quad p_i=\frac1{Z_{ix}Z_{iy}}\int_\ell^h F_{\chi^2_2(\eta_i)}\!\left(\frac{R^2-(q_z-z)^2}{\sigma_h^2}\right)f_{iz}(z)\,dz$$
 
@@ -170,8 +150,6 @@ Implemented and checked against mathematical contracts.
 
 ## F11: Structured grid and nominal separation
 
-Main Eq. (10)
-
 $$\mathbf s_{ij}=(c_x+id,c_y+jd,z_0),\quad i,j\in\{-1,0,1\},\quad d\ge40\ \mathrm m$$
 
 Units: Coordinates and pitch: m; actual positions are not collision-constrained.
@@ -185,8 +163,6 @@ Implemented and checked against mathematical contracts.
 3. The smallest distinct grid separation equals the pitch.
 
 ## F12: Bounded parameterization and objective
-
-Main Eq. (11) and maximization statement
 
 $$d=40+460\theta_3,\quad z_0=120+150\theta_4,\quad c_{x,y}=(2\theta_{1,2}-1)(500-d),\quad\max_{\theta\in[0,1]^4}C(\mathcal S(\theta))$$
 
@@ -204,8 +180,6 @@ Implemented and checked against mathematical contracts.
 
 ## F13: Monte Carlo union observation and batch mean
 
-Main Eq. (12)
-
 $$I_{rm}=\mathbf1_{\{\min_i\|\mathbf S_{irm}-\mathbf Q_{rm}\|\le R\}},\qquad\widehat C_r=M^{-1}\sum_{m=1}^{M}I_{rm}$$
 
 Units: Bernoulli observations and batch fraction: dimensionless.
@@ -222,8 +196,6 @@ Implemented and checked against mathematical contracts.
 
 ## F14: Inverse-CDF actual-position sampling
 
-Main Monte Carlo sampling paragraph
-
 $$S=\mu+\sigma\Phi^{-1}\{\Phi(\alpha)+U[\Phi(\beta)-\Phi(\alpha)]\},\quad U\sim\mathcal U(0,1)$$
 
 Units: Position: m; uniform variates: dimensionless.
@@ -238,8 +210,6 @@ Implemented and checked against mathematical contracts.
 4. Use the equivalent survival-tail identity for a far-left parent centre.
 
 ## F15: Independent-batch confidence intervals
-
-Main Monte Carlo confidence interval paragraph
 
 $$\bar C\ \pm\ t_{0.975,n-1}\frac{s_C}{\sqrt n},\quad n=30$$
 
@@ -256,8 +226,6 @@ Implemented and checked against mathematical contracts.
 
 ## F16: Coverage gain and expected uncovered fraction
 
-Main Results RQ3 and uncovered-volume interpretation
-
 $$G_{\rm pp}=100(C_o-C_f),\quad G_{\rm rel}=100(C_o/C_f-1),\quad G_{\rm unc}=100(C_o-C_f)/(1-C_f)$$
 
 Units: First output: percentage points; remaining outputs: relative percent.
@@ -272,8 +240,6 @@ Implemented and checked against mathematical contracts.
 4. Multiply by 100 and label percentage points versus relative percent correctly.
 
 ## F17: PSO update and bounds
-
-Supplementary Methods S1 PSO expression
 
 $$\mathbf v\leftarrow0.7298\mathbf v+1.49618\mathbf r_1\odot(\mathbf p-\mathbf u)+1.49618\mathbf r_2\odot(\mathbf g-\mathbf u)$$
 
@@ -290,8 +256,6 @@ Implemented and checked against mathematical contracts.
 5. Evaluate candidates and update personal/global best records; count initialization.
 
 ## F18: AFSA schedule and specified variant
-
-Supplementary Methods S1 AFSA expressions
 
 $$\rho=n_{\rm eval}/B,\quad v=0.5(1-\rho)+0.05,\quad h=0.1(1-\rho)+0.01$$
 
@@ -310,8 +274,6 @@ Implemented and checked against mathematical contracts.
 
 ## F19: Prescribed synthetic bias and ideal compensation
 
-Main Discussion; Supplementary Analysis S4
-
 $$\mathbf b_k=(80\sin(k\pi/6),40\sin(k\pi/3)),\quad\mathbf s_{i,k}=\mathbf s_i^*-(b_{kx},b_{ky},0)$$
 
 Units: Bias and position: m; steps have no assigned physical duration.
@@ -327,8 +289,6 @@ Implemented and checked against mathematical contracts.
 
 ## F20: Movement-distance proxy
 
-Main Discussion; Supplementary Analysis S4
-
 $$D=\sum_{k,i}\|\mathbf s_{i,k}-\mathbf s_{i,k-1}\|_2$$
 
 Units: Metres; this is not energy.
@@ -341,8 +301,6 @@ Implemented and checked against mathematical contracts.
 2. Compute Euclidean distances and sum across nodes and steps.
 
 ## F21: Energy-aware extension interface
-
-Main Discussion energy objective
 
 $$J=C-\lambda E$$
 
@@ -358,8 +316,6 @@ Prospective interface only. No empirical energy advantage is reported.
 
 ## F22: Frozen-current displacement and parent centre
 
-Main current-replay Methods
-
 $$\mathbf b_t=\Delta t(u_t,v_t),\qquad\boldsymbol\mu_{it}=\mathbf s_i+(b_{tx},b_{ty},0)$$
 
 Units: Velocity: m/s; horizon: s; derived displacement: m.
@@ -374,8 +330,6 @@ Current forcing is real reanalysis; the displacement rule and residual law are a
 4. Condition residual coordinates on the same physical bounds.
 
 ## F23: Coverage averaged over common environmental forcing
-
-Main current-replay objective
 
 $$C_{\rm env}=T^{-1}\sum_{t=1}^{T}\frac1{|\Omega|}\int_\Omega\left[1-\prod_i(1-p_i(\mathbf q\mid\mathbf b_t))\right]d\mathbf q$$
 
@@ -393,8 +347,6 @@ Implemented and checked against mathematical contracts.
 
 ## F24: Temporal block-bootstrap interval
 
-Main current-replay statistical Methods
-
 $$\widehat G^*_b=T^{-1}\sum_{j=1}^{T}g_{I_{bj}},\qquad\mathrm{CI}=[Q_{.025}(\widehat G^*),Q_{.975}(\widehat G^*)]$$
 
 Units: Fraction; temporal-record variability is distinct from independent Monte Carlo error.
@@ -410,8 +362,6 @@ Implemented and checked against mathematical contracts.
 
 ## F25: Conditional spherical integral with drift
 
-Main current-replay Methods, F10 with shifted horizontal centres
-
 $$\eta_{it}=\|\mathbf q_h-\boldsymbol\mu_{it,h}\|^2/\sigma_h^2,\qquad Z_{it,k}=\Phi((b_k-\mu_{it,k})/\sigma_k)-\Phi((a_k-\mu_{it,k})/\sigma_k)$$
 
 Units: Dimensionless probability and normalizers.
@@ -426,8 +376,6 @@ Implemented and checked against mathematical contracts.
 4. Aggregate conditionally using F06/F07; return one coverage value per day.
 
 ## F26: Training-state reduction and weighted objective
-
-Main current-replay optimization settings
 
 $$w_k=n_k/T_{\rm train},\quad\bar{\mathbf b}_k=n_k^{-1}\sum_{t\in\mathcal C_k}\mathbf b_t,\quad C_K=\sum_kw_kC(\mathcal S\mid\bar{\mathbf b}_k)$$
 
@@ -445,8 +393,6 @@ Implemented and checked against mathematical contracts.
 6. Compare 16 and 32 representatives against full-year training evaluation.
 
 ## F27: Random design sample and coordinate plots
-
-Main design sampling; Supplementary Analysis S3
 
 $$c_x,c_y\sim\mathcal U(-160,160),\quad z_0\sim\mathcal U(120,270),\quad d=40\ \mathrm m$$
 
